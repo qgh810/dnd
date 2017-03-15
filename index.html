@@ -61,11 +61,11 @@
         onDragStart: function () {
           console.log('html 被拖元素监听到拖动开始')
         },
-        onDragEnd: function (isBack, data, inTarget) {
+        onDragEnd: function (params) {
           console.log('监听到拖动结束')
-          console.log('放下后被拖元素是否返回?', isBack)
-          console.log('当前被拖动的数据: ', data)
-          console.log('放下的位置是否在目标内: ', inTarget)
+          console.log('放下后被拖元素是否返回?', params.isBack)
+          console.log('当前被拖动的数据: ', params.data)
+          console.log('放下的位置是否在目标内: ', params.inTarget)
           console.warn('加多一个目标实例')
         }
       })

@@ -12,6 +12,8 @@ class Drag {
     this.el = checkNode(el)
     if (!this.el) return
 
+    this.el.style.userSelect = 'none'
+
     this.options = this.checkOptions(options)
     this.data = options.data
     this.mouseDownPosition = {left: -1, top: -1}
@@ -110,7 +112,11 @@ class Drag {
       }
     }
     // 1是否会返回, 2源数据, 3是否在目标内, 4拓展参数
-    this.emit('onDragEnd', store.canBack, this.data, store._targetIndex > -1)
+    this.emit('onDragEnd', {
+      isBack: store.canBack,
+      data: this.data,
+      inTarget: store._targetIndex > -1
+    })
     store.data = null
   }
 

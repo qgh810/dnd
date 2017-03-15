@@ -102,6 +102,8 @@ var Drag = function () {
       this.el = (0, _check.checkNode)(el);
       if (!this.el) return;
 
+      this.el.style.userSelect = 'none';
+
       this.options = this.checkOptions(options);
       this.data = options.data;
       this.mouseDownPosition = { left: -1, top: -1 };
@@ -212,7 +214,11 @@ var Drag = function () {
         }
       }
       // 1是否会返回, 2源数据, 3是否在目标内, 4拓展参数
-      this.emit('onDragEnd', _store2.default.canBack, this.data, _store2.default._targetIndex > -1);
+      this.emit('onDragEnd', {
+        isBack: _store2.default.canBack,
+        data: this.data,
+        inTarget: _store2.default._targetIndex > -1
+      });
       _store2.default.data = null;
     }
   }, {
