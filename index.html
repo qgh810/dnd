@@ -26,6 +26,7 @@
         border: 1px solid #fff;
         border-radius: 50px;
         overflow: hidden;
+        display: inline-block;
       }
       .drag-content {
         background: orange;
@@ -43,30 +44,71 @@
   </head>
   <body>
     <div class="app-root">
-      <div class="draggable-box">
+      <div class="draggable-box drag1">
         <div class="drag-content">
           拖动我
         </div>
       </div>
-
-      <div class="droppable-box">
-
+      <div class="draggable-box drag2">
+        <div class="drag-content">
+          也可以拖动我
+        </div>
       </div>
+
+      <div class="droppable-box drop1"></div>
+      <div class="droppable-box drop2"></div>
     </div>
   </body>
   <script>
     window.onload = function () {
-      new Drag('.draggable-box', {
-        data: 123, // 要传递的数据
-        onDragStart: function () {
-          console.log('html 被拖元素监听到拖动开始')
+      // 初始化被拖动元素
+      new Drag('.drag1', {
+        data: 101, // 要传递的数据
+        // onDragStart: function () {
+        //   console.log('html 被拖元素监听到拖动开始')
+        // },
+        // onDragEnd: function (params) {
+        //   console.log('监听到拖动结束')
+        //   console.log('放下后被拖元素是否返回?', params.isBack)
+        //   console.log('当前被拖动的数据: ', params.data)
+        //   console.log('放下的位置是否在目标内: ', params.inTarget)
+        //   console.warn('加多一个目标实例')
+        //   data的默认值是那个当前dom
+        // }
+      })
+
+      new Drag('.drag2', {
+        data: 99, // 要传递的数据
+        // onDragStart: function () {
+        //   console.log('html 被拖元素监听到拖动开始')
+        // },
+        // onDragEnd: function (params) {
+        //   console.log('监听到拖动结束')
+        //   console.log('放下后被拖元素是否返回?', params.isBack)
+        //   console.log('当前被拖动的数据: ', params.data)
+        //   console.log('放下的位置是否在目标内: ', params.inTarget)
+        //   console.warn('加多一个目标实例')
+        //   data的默认值是那个当前dom
+        // }
+      })
+
+      new Drop('.drop1', {
+        condition: function (data) {
+          return data > 100
         },
-        onDragEnd: function (params) {
-          console.log('监听到拖动结束')
-          console.log('放下后被拖元素是否返回?', params.isBack)
-          console.log('当前被拖动的数据: ', params.data)
-          console.log('放下的位置是否在目标内: ', params.inTarget)
-          console.warn('加多一个目标实例')
+
+        onDrop: function () {
+          console.log('监听到有东西放下')
+        }
+      })
+
+      new Drop('.drop2', {
+        condition: function (data) {
+          return data < 100
+        },
+
+        onDrop: function () {
+          console.log('监听到有东西放下')
         }
       })
     }

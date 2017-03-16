@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,13 +73,46 @@
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.checkNode = checkNode;
+function checkNode(el) {
+  var result = el;
+  if (!result) {
+    return console.error('找不到当前节点', el);
+  }
+  if (typeof el === 'string') {
+    var domName = el;
+    result = document.querySelector(domName);
+    if (!result) {
+      return console.error('找不到当前节点', el);
+    }
+  } else if ((typeof el === 'undefined' ? 'undefined' : _typeof(el)) === 'object') {
+    if (!el.nodeName) {
+      return console.error('找不到当前节点', el);
+    }
+  }
+  return result;
+}
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _check = __webpack_require__(6);
+var _check = __webpack_require__(0);
 
-var _dom = __webpack_require__(7);
+var _dom = __webpack_require__(4);
 
-var _store = __webpack_require__(5);
+var _store = __webpack_require__(3);
 
 var _store2 = _interopRequireDefault(_store);
 
@@ -150,12 +183,17 @@ var Drag = function () {
       this.setMarkStyle();
       this.mark.onmousemove = this.onMarkMouseMove.bind(this);
       this.mark.onmouseup = this.onMarkMouseUp.bind(this);
-      this.mark.onmouseleave = this.onMarkMouseUp.bind(this);
+      // this.mark.onmouseleave = this.onMarkMouseUp.bind(this)
       document.body.appendChild(this.mark);
       // 创建复制元素
       _store2.default.cloneDom = this.el.cloneNode(true);
       this.setCloneDomStyle();
       this.mark.appendChild(_store2.default.cloneDom);
+
+      // 创建状态icon
+      _store2.default.stateIcon = document.createElement('i');
+      this.setIconStyle();
+      this.mark.appendChild(_store2.default.stateIcon);
 
       this.emit('onDragStart');
     }
@@ -224,9 +262,13 @@ var Drag = function () {
   }, {
     key: 'removeMark',
     value: function removeMark() {
-      document.body.removeChild(this.mark);
-      _store2.default.cloneDom = null;
-      this.el.style.opacity = '1';
+      try {
+        document.body.removeChild(this.mark);
+        _store2.default.cloneDom = null;
+        this.el.style.opacity = '1';
+      } catch (e) {
+        //
+      }
     }
 
     // 检查并且初始化options
@@ -279,6 +321,19 @@ var Drag = function () {
       style.zIndex = 10;
     }
   }, {
+    key: 'setIconStyle',
+    value: function setIconStyle() {
+      var style = _store2.default.stateIcon.style;
+      style.display = 'none';
+      style.position = 'absolute';
+      style.width = '20px';
+      style.height = '20px';
+      style.zIndex = '100';
+      // style.borderRadius = '20px'
+      // style.border = '2px solid #fff'
+      // style.boxSizing = 'border-box'
+    }
+  }, {
     key: 'emit',
     value: function emit() {
       var _options;
@@ -295,63 +350,184 @@ var Drag = function () {
 module.exports = Drag;
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-function Drop() {
-  console.log('drop');
-}
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _check = __webpack_require__(0);
+
+var _dom = __webpack_require__(4);
+
+var _config = __webpack_require__(6);
+
+var _store = __webpack_require__(3);
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Drop = function () {
+  function Drop(el, options) {
+    _classCallCheck(this, Drop);
+
+    this.initData(el, options) && this.init();
+  }
+
+  _createClass(Drop, [{
+    key: 'initData',
+    value: function initData(el, options) {
+      this.el = (0, _check.checkNode)(el);
+      if (!this.el) return;
+      this.options = this.checkOptions(options);
+      if (!this.options) return;
+
+      this._active = false; // 是否进入当前范围
+      this._accept = false; // 是否同意
+      this.index = -1; // 当前索引
+      this.acceptIconClass = 'drag-clone-icon accept';
+      this.notAcceptIconClass = 'drag-clone-icon not-accept';
+      return true;
+    }
+
+    // 检查并且初始化options
+
+  }, {
+    key: 'checkOptions',
+    value: function checkOptions(options) {
+      if (!options) {
+        return console.error('未检测到options 请参考相关说明' + _config.DOCUMENT_ADDR);
+      }
+      if (typeof options.onDrop !== 'function') {
+        return console.error('onDrop 必须是一个函数 请参考相关说明' + _config.DOCUMENT_ADDR);
+      }
+      if (options.condition && typeof options.condition !== 'function') {
+        return console.error('condition必须是一个函数 并且根据传入的data返回一个布尔值 请参考相关说明' + _config.DOCUMENT_ADDR);
+      }
+      var baseOptions = {
+        condition: function condition() {
+          return true;
+        }
+      };
+      for (var option in baseOptions) {
+        !options[options] && (options[options] = baseOptions[option]);
+      }
+      return options;
+    }
+  }, {
+    key: 'init',
+    value: function init() {
+      this.setStore();
+    }
+  }, {
+    key: 'setStore',
+    value: function setStore() {
+      var index = _store2.default.conditions.push(this.options.condition) - 1;
+      this.index = index;
+      _store2.default.targetOnDragStarts[index] = this.onDragStart.bind(this);
+      _store2.default.targetOnDragEnds[index] = this.onDragEnd.bind(this);
+      _store2.default.onDragEnters[index] = this.onDragEnter.bind(this);
+      _store2.default.onDragLeaves[index] = this.onDragLeave.bind(this);
+      _store2.default.onDrops[index] = this.onDrop.bind(this);
+      _store2.default.iconClasss[index] = { accept: this.acceptIconClass, notAccept: this.notAcceptIconClass };
+    }
+
+    // 目标监听到拖动开始
+
+  }, {
+    key: 'onDragStart',
+    value: function onDragStart(data, accept) {
+      console.log('目标监听到拖动开始');
+      this._active = false;
+      this._accept = accept;
+      this.setStorePositions();
+      this.emit('onDragStart', data, accept);
+    }
+
+    // 目标监听到拖动结束
+
+  }, {
+    key: 'onDragEnd',
+    value: function onDragEnd(inTarget, data) {
+      console.log('目标监听到拖动结束');
+      this.emit('onDragEnd', inTarget, data);
+    }
+
+    /**
+     * 目标监听到拖动进入当前范围
+     */
+
+  }, {
+    key: 'onDragEnter',
+    value: function onDragEnter(accept, data) {
+      console.log('目标监听到拖动进入当前范围');
+      this._active = true;
+      this._accept = accept;
+      this.emit('onDragEnter', accept, data);
+    }
+
+    // 目标监听到离开当前范围
+
+  }, {
+    key: 'onDragLeave',
+    value: function onDragLeave() {
+      console.log('目标监听到离开当前范围');
+      this._active = false;
+      this._accept = false;
+      this.emit('onDragLeave');
+    }
+
+    // 目标监听到被拖动元素在自己范围内放下
+
+  }, {
+    key: 'onDrop',
+    value: function onDrop(success, data) {
+      console.log('目标监听到放下成功');
+      this._active = false;
+      this._accept = false;
+      this.emit('drop', success, data);
+    }
+  }, {
+    key: 'setStorePositions',
+    value: function setStorePositions() {
+      var _getBoundingClientRec = (0, _dom.getBoundingClientRect)(this.el),
+          left = _getBoundingClientRec.left,
+          top = _getBoundingClientRec.top,
+          width = _getBoundingClientRec.width,
+          height = _getBoundingClientRec.height;
+
+      _store2.default.targetPositions[this.index] = {
+        top: top,
+        bottom: top + height,
+        left: left,
+        right: left + width
+      };
+    }
+  }, {
+    key: 'emit',
+    value: function emit() {
+      var _options;
+
+      var args = Array.from(arguments);
+      var functionName = args.shift();
+      typeof this.options[functionName] === 'function' && (_options = this.options)[functionName].apply(_options, _toConsumableArray(args));
+    }
+  }]);
+
+  return Drop;
+}();
 
 module.exports = Drop;
 
 /***/ }),
-/* 2 */,
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _drag = __webpack_require__(0);
-
-var _drag2 = _interopRequireDefault(_drag);
-
-var _drop = __webpack_require__(1);
-
-var _drop2 = _interopRequireDefault(_drop);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var draggable = { Drag: _drag2.default, Drop: _drop2.default };
-
-if (true) {
-  window.Drag = _drag2.default;
-  window.Drop = _drop2.default;
-}
-
-exports.default = { Drag: _drag2.default, Drop: _drop2.default };
-
-// if ( typeof module === "object" && module && typeof module.exports === "object" ) {
-//   export default {Drag, Drop}
-// } else {
-//   window.Drag = Drag
-//   window.Drop = Drop
-// }
-//
-// if ( typeof window === "object" && typeof window.document === "object" ) {
-//     window.jQuery = window.$ = jQuery;
-// }
-
-/***/ }),
-/* 4 */,
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -463,17 +639,17 @@ var dragStore = {
       }
     }
     if (this.targetIndex > -1) {
+      this.setIconPosition(pageX, pageY);
       if (!this._inTarget) {
         this._inTarget = true;
-        var success = Boolean(this.conditions[this.targetIndex](this.data));
-        var iconClassName = success ? this.iconClasss[this.targetIndex].accept : this.iconClasss[this.targetIndex].notAccept;
+        var accept = Boolean(this.conditions[this.targetIndex](this.data));
+        var iconClassName = accept ? this.iconClasss[this.targetIndex].accept : this.iconClasss[this.targetIndex].notAccept;
+        this.stateIcon.className = iconClassName;
+        // this.stateIcon.style.display = 'block'
+        this.setIconStyle(accept);
 
-        this._stateIcon = document.createElement('i');
-        this._stateIcon.className = iconClassName;
-        this.cloneDom.appendChild(this._stateIcon);
-
-        this.canBack = !success;
-        this.onDragEnters[this.targetIndex](success, this.data);
+        this.canBack = !accept;
+        this.onDragEnters[this.targetIndex](accept, this.data);
       } else {
         if (this._prevIndex > -1 && this.targetIndex !== this._prevIndex) {
           this.canBack = true;
@@ -499,9 +675,22 @@ var dragStore = {
     this.removeIcon();
     this.cloneDom = null;
   },
+  setIconStyle: function setIconStyle(accept) {
+    var style = this.stateIcon.style;
+    style.display = 'block';
+
+    var acceptbackground = 'no-repeat  url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RkUxNENCODcwMjdFMTFFNzhDQjhBODQ4QzIwNTVBM0QiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RkUxNENCODgwMjdFMTFFNzhDQjhBODQ4QzIwNTVBM0QiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGRTE0Q0I4NTAyN0UxMUU3OENCOEE4NDhDMjA1NUEzRCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpGRTE0Q0I4NjAyN0UxMUU3OENCOEE4NDhDMjA1NUEzRCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsH+M4sAAAPNSURBVHja5FrPS1RRGP3mOuqMQS5EpI0tApEiRVq5UZBAbBW06QdUWuTGRYt+gH+AULZo0aaosYK0TdAqCUJw5SokoxDBRW5CBiGDdGz0Td+Z7kz3Xe8b5715M16n8zgwzLu+d473u/d+97sTyWQyFAKizMfMPmYLs54pPNo6zC3mKnOGOczcLlVApEQjk8wBZiOeFfAZELDOnGZerLSRWWY3s5bCRZo5x+z1+4fCZ/sEM8XsKYMJks/ske9IlKNHMAaWma1eDb5sfqaFjXl6vfaK0s5vHgiOx39OUK2oo/NNl6ijoYtOxE8Weu8K81gxY6gYI0PMR8y4fmNx8yt9YvHPk0850J1gsc3GrjZfp0421R4/bmqyyRzZq4f2MjLGvC17JI+l1CLN//pIE8knocbVYPMN6jp0itpi7fot9Mg4czSIEZi4w6xRv0QP3F25SeXEvdaH2R7SsMO872XGy8iQXBdcPTG19pJeJJ9RJXCl+RpdaLps6plhU5iZjED8T31MPPg+Rh/W31Mlcbqxn24dGTWNmcP6BGCafpdtMAHgnXi3hrjUWHAdSehTLMJpP0yoZqBBQ6seXnpopWSeFMrAftP2jhpEQ/bzhrNB55bOhDkBIF+LmXpkVjWBKbbU2amGr4i8atyTn29ACzQpqJeadxnpVlthnbANBk3dupFJNXfCih32YhcGoAnatNxsUjUyoC96tsKgbSBnJCr3E3kgd7IVBm3QHhVyBY+oWWzQBLASgDZodOWd7EHI7WkeCxaHVQGNfULusfPAfsJ2GDS2CHXtyO41eVNkOwwa64WepjgWj48CGkU0SNpR7CodEzHX57dtxeVsO3z5TWd8G0HuFAlY+VGNFZ6Z/Fd2BFUJfPcIstggoZVNrZ1U0aFVdiN+YhdjImcGJs4u9ZetRwSRewoQByDaDBodITco/9JJUWe9EYPGLRhZVb9BBdB2GDSuwsiM+k3H7nqSdTBonBGyTpSfuFGLjVg8TqBNqxdD+7CQ9aF19Q5qsbbCoA3at3P/+mn1TqfF4WXQNq2u7DgpSufuoCqOgrJtgCatYp+W2l2DYU5tgaq4bTBomjPlWr3qmoLSPopipQCpRkZeQdIOFdCiHTdskXJEp1caUYYcVL+oZAXeCx6V+Qn6e2pgNAJ8I63+u19FbMCjIo8juaOuabmajxXQYERviAeiiysZTgYTRm1ePZJDVRy9qWYO/GFoDlVxPK1OAFb/YIBgxAcTzFSm/EjJdxWt7b/9UY2azmC/OcX8oe5nAiAjnzEln9kbaKxVyw/P/ggwAL2hTh2cIlwtAAAAAElFTkSuQmCC) center center / 100% auto';
+    var notAcceptBackground = 'no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RUZGQzQzNkEwMjdGMTFFNzhDQjhBODQ4QzIwNTVBM0QiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RUZGQzQzNkIwMjdGMTFFNzhDQjhBODQ4QzIwNTVBM0QiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGRTE0Q0I4OTAyN0UxMUU3OENCOEE4NDhDMjA1NUEzRCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpGRTE0Q0I4QTAyN0UxMUU3OENCOEE4NDhDMjA1NUEzRCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmdTj/IAAAXZSURBVHja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) center center / 100% auto';
+    style.background = accept ? acceptbackground : notAcceptBackground;
+  },
+  setIconPosition: function setIconPosition(x, y) {
+    var style = this.stateIcon.style;
+    style.left = x + 8 + 'px';
+    style.top = y + 'px';
+  },
   removeIcon: function removeIcon() {
     try {
-      this.cloneDom.removeChild(this._stateIcon);
+      this.stateIcon.style.display = 'none';
     } catch (e) {}
   },
   removeDrop: function removeDrop(index) {
@@ -518,40 +707,7 @@ var dragStore = {
 exports.default = dragStore;
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-exports.checkNode = checkNode;
-function checkNode(el) {
-  var result = el;
-  if (!result) {
-    return console.error('找不到当前节点', el);
-  }
-  if (typeof el === 'string') {
-    var domName = el;
-    result = document.querySelector(domName);
-    if (!result) {
-      return console.error('找不到当前节点', el);
-    }
-  } else if ((typeof el === 'undefined' ? 'undefined' : _typeof(el)) === 'object') {
-    if (!el.nodeName) {
-      return console.error('找不到当前节点', el);
-    }
-  }
-  return result;
-}
-
-/***/ }),
-/* 7 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -586,6 +742,59 @@ var getSize = exports.getSize = function getSize(node) {
   };
   return result;
 };
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _drag = __webpack_require__(1);
+
+var _drag2 = _interopRequireDefault(_drag);
+
+var _drop = __webpack_require__(2);
+
+var _drop2 = _interopRequireDefault(_drop);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var draggable = { Drag: _drag2.default, Drop: _drop2.default };
+
+if (true) {
+  window.Drag = _drag2.default;
+  window.Drop = _drop2.default;
+}
+
+exports.default = { Drag: _drag2.default, Drop: _drop2.default };
+
+// if ( typeof module === "object" && module && typeof module.exports === "object" ) {
+//   export default {Drag, Drop}
+// } else {
+//   window.Drag = Drag
+//   window.Drop = Drop
+// }
+//
+// if ( typeof window === "object" && typeof window.document === "object" ) {
+//     window.jQuery = window.$ = jQuery;
+// }
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var DOCUMENT_ADDR = exports.DOCUMENT_ADDR = '';
 
 /***/ })
 /******/ ]);

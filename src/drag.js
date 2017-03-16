@@ -53,12 +53,17 @@ class Drag {
     this.setMarkStyle()
     this.mark.onmousemove = this.onMarkMouseMove.bind(this)
     this.mark.onmouseup = this.onMarkMouseUp.bind(this)
-    this.mark.onmouseleave = this.onMarkMouseUp.bind(this)
+    // this.mark.onmouseleave = this.onMarkMouseUp.bind(this)
     document.body.appendChild(this.mark)
     // 创建复制元素
     store.cloneDom = this.el.cloneNode(true)
     this.setCloneDomStyle()
     this.mark.appendChild(store.cloneDom)
+
+    // 创建状态icon
+    store.stateIcon = document.createElement('i')
+    this.setIconStyle()
+    this.mark.appendChild(store.stateIcon)
 
     this.emit('onDragStart')
   }
@@ -121,9 +126,13 @@ class Drag {
   }
 
   removeMark () {
-    document.body.removeChild(this.mark)
-    store.cloneDom = null
-    this.el.style.opacity = '1'
+    try {
+      document.body.removeChild(this.mark)
+      store.cloneDom = null
+      this.el.style.opacity = '1'
+    } catch (e) {
+      //
+    }
   }
 
   // 检查并且初始化options
@@ -166,6 +175,18 @@ class Drag {
     style.transform = 'translate(0,0)'
     style.cursor = 'move'
     style.zIndex = 10
+  }
+
+  setIconStyle () {
+    let style = store.stateIcon.style
+    style.display = 'none'
+    style.position = 'absolute'
+    style.width = '20px'
+    style.height = '20px'
+    style.zIndex = '100'
+    // style.borderRadius = '20px'
+    // style.border = '2px solid #fff'
+    // style.boxSizing = 'border-box'
   }
 
   emit () {
