@@ -63,471 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-exports.checkNode = checkNode;
-function checkNode(el) {
-  var result = el;
-  if (!result) {
-    return console.error('找不到当前节点', el);
-  }
-  if (typeof el === 'string') {
-    var domName = el;
-    result = document.querySelector(domName);
-    if (!result) {
-      return console.error('找不到当前节点', el);
-    }
-  } else if ((typeof el === 'undefined' ? 'undefined' : _typeof(el)) === 'object') {
-    if (!el.nodeName) {
-      return console.error('找不到当前节点', el);
-    }
-  }
-  return result;
-}
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _check = __webpack_require__(0);
-
-var _dom = __webpack_require__(4);
-
-var _store = __webpack_require__(3);
-
-var _store2 = _interopRequireDefault(_store);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Drag = function () {
-  function Drag(el, options) {
-    _classCallCheck(this, Drag);
-
-    this.initData(el, options) && this.init();
-  }
-
-  _createClass(Drag, [{
-    key: 'initData',
-    value: function initData(el, options) {
-      this.el = (0, _check.checkNode)(el);
-      if (!this.el) return;
-
-      this.el.style.userSelect = 'none';
-
-      this.options = this.checkOptions(options);
-      this.data = options.data;
-      this.mouseDownPosition = { left: -1, top: -1 };
-      this.mouseDragging = false;
-      this.backTime = 300;
-      this.mark = null;
-      this.position = { left: 0, top: 0 };
-      return true;
-    }
-  }, {
-    key: 'init',
-    value: function init() {
-      this.addEventListener();
-    }
-  }, {
-    key: 'addEventListener',
-    value: function addEventListener() {
-      var _this = this;
-
-      var dom = this.el;
-      // 监听当前节点的鼠标点击事件
-      dom.addEventListener('mousedown', function (e) {
-        var pageX = e.pageX,
-            pageY = e.pageY;
-
-        _this.mouseDownPosition = { left: pageX, top: pageY };
-        dom.onmousemove = _this.onElMousemove.bind(_this);
-        dom.onmouseup = _this.onElMouseUp.bind(_this);
-        document.addEventListener('mouseup', _this.onElMouseUp.bind(_this));
-      });
-    }
-  }, {
-    key: 'onElMousemove',
-    value: function onElMousemove() {
-      if (this.mouseDragging) return;
-      this.mouseDragging = true;
-
-      _store2.default.data = this.data;
-      this.el.style.opacity = '0.5';
-      this.position = (0, _dom.getBoundingClientRect)(this.el);
-      // 创建蒙层
-      this.mark = document.createElement('div');
-      this.mark.className = 'x-drag-mark';
-      this.setMarkStyle();
-      this.mark.onmousemove = this.onMarkMouseMove.bind(this);
-      this.mark.onmouseup = this.onMarkMouseUp.bind(this);
-      // this.mark.onmouseleave = this.onMarkMouseUp.bind(this)
-      document.body.appendChild(this.mark);
-      // 创建复制元素
-      _store2.default.cloneDom = this.el.cloneNode(true);
-      this.setCloneDomStyle();
-      this.mark.appendChild(_store2.default.cloneDom);
-
-      // 创建状态icon
-      _store2.default.stateIcon = document.createElement('i');
-      this.setIconStyle();
-      this.mark.appendChild(_store2.default.stateIcon);
-
-      this.emit('onDragStart');
-    }
-  }, {
-    key: 'onElMouseUp',
-    value: function onElMouseUp() {
-      this.mouseDragging = false;
-      this.el.onmousemove = null;
-      this.el.onmouseup = null;
-      this.mark && (this.mark.onmousemove = null);
-      this.mark && (this.mark.onmouseup = null);
-      document.removeEventListener('mouseup', this.onElMouseUp.bind(this));
-    }
-  }, {
-    key: 'onMarkMouseMove',
-    value: function onMarkMouseMove(e) {
-      if (!_store2.default.cloneDom) return;
-      var pageX = e.pageX,
-          pageY = e.pageY;
-
-      var translateX = pageX - this.mouseDownPosition.left;
-      var translateY = pageY - this.mouseDownPosition.top;
-      _store2.default.cloneDom.style.transform = 'translate(' + translateX + 'px,' + translateY + 'px)';
-      _store2.default.mousePosition = [pageX, pageY];
-    }
-  }, {
-    key: 'onMarkMouseUp',
-    value: function onMarkMouseUp() {
-      document.removeEventListener('mouseup', this.onElMouseUp.bind(this));
-      this.mouseDragging = false;
-      this.mark.onmousemove = null;
-      this.el.onmousemove = null;
-
-      this.mark.style.cursor = 'auto';
-      var style = _store2.default.cloneDom && _store2.default.cloneDom.style;
-      if (!style) return;
-      // 复制的dom的动画效果
-      if (_store2.default.canBack) {
-        style.transition = 'all ' + this.backTime / 1000 + 's cubic-bezier(0.2,0.4,0.25,1.1)';
-        style.transform = 'translate(0,0)';
-        setTimeout(this.removeMark, this.backTime);
-      } else {
-        if (this.options.removeanimationtype === 0 && !_store2.default._inTarget) {
-          // 删除动画类型0 渐渐消失
-          style.transition = 'all 0.1s ease';
-          style.opacity = '0';
-          setTimeout(this.removeMark, 200);
-        } else if (this.options.removeanimationtype === 1 && !_store2.default._inTarget) {
-          // 删除动画类型1 爆炸
-          style.transition = 'all 0.1s ease';
-          style.boxShadow = '0 0 50px 30px rgba(0,0,0,0.3)';
-          style.opacity = '0';
-          setTimeout(this.removeMark, 100);
-        } else {
-          this.removeMark();
-        }
-      }
-      // 1是否会返回, 2源数据, 3是否在目标内, 4拓展参数
-      this.emit('onDragEnd', {
-        isBack: _store2.default.canBack,
-        data: this.data,
-        inTarget: _store2.default._targetIndex > -1
-      });
-      _store2.default.data = null;
-    }
-  }, {
-    key: 'removeMark',
-    value: function removeMark() {
-      try {
-        document.body.removeChild(this.mark);
-        _store2.default.cloneDom = null;
-        this.el.style.opacity = '1';
-      } catch (e) {
-        //
-      }
-    }
-
-    // 检查并且初始化options
-
-  }, {
-    key: 'checkOptions',
-    value: function checkOptions(options) {
-      options = options || {};
-      var baseOptions = {
-        data: '这里可以放需要丢给目标的内容',
-        removeanimationtype: 1
-      };
-      for (var option in baseOptions) {
-        !options[options] && (options[options] = baseOptions[option]);
-      }
-      return options;
-    }
-  }, {
-    key: 'setMarkStyle',
-    value: function setMarkStyle() {
-      var markStyle = {
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        width: '100%',
-        height: '100%',
-        background: 'rgba(0,0,0,0.1)',
-        zIndex: '10',
-        cursor: 'move'
-      };
-      for (var style in markStyle) {
-        this.mark.style[style] = markStyle[style];
-      }
-    }
-  }, {
-    key: 'setCloneDomStyle',
-    value: function setCloneDomStyle() {
-      var dom = _store2.default.cloneDom;
-      var style = dom.style;
-      var _position = this.position,
-          left = _position.left,
-          top = _position.top;
-
-      style.position = 'absolute';
-      style.left = left + 'px';
-      style.top = top + 'px';
-      style.opacity = '1';
-      style.transform = 'translate(0,0)';
-      style.cursor = 'move';
-      style.zIndex = 10;
-    }
-  }, {
-    key: 'setIconStyle',
-    value: function setIconStyle() {
-      var style = _store2.default.stateIcon.style;
-      style.display = 'none';
-      style.position = 'absolute';
-      style.width = '20px';
-      style.height = '20px';
-      style.zIndex = '100';
-      // style.borderRadius = '20px'
-      // style.border = '2px solid #fff'
-      // style.boxSizing = 'border-box'
-    }
-  }, {
-    key: 'emit',
-    value: function emit() {
-      var _options;
-
-      var args = Array.from(arguments);
-      var functionName = args.shift();
-      typeof this.options[functionName] === 'function' && (_options = this.options)[functionName].apply(_options, _toConsumableArray(args));
-    }
-  }]);
-
-  return Drag;
-}();
-
-module.exports = Drag;
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _check = __webpack_require__(0);
-
-var _dom = __webpack_require__(4);
-
-var _config = __webpack_require__(6);
-
-var _store = __webpack_require__(3);
-
-var _store2 = _interopRequireDefault(_store);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Drop = function () {
-  function Drop(el, options) {
-    _classCallCheck(this, Drop);
-
-    this.initData(el, options) && this.init();
-  }
-
-  _createClass(Drop, [{
-    key: 'initData',
-    value: function initData(el, options) {
-      this.el = (0, _check.checkNode)(el);
-      if (!this.el) return;
-      this.options = this.checkOptions(options);
-      if (!this.options) return;
-
-      this._active = false; // 是否进入当前范围
-      this._accept = false; // 是否同意
-      this.index = -1; // 当前索引
-      this.acceptIconClass = 'drag-clone-icon accept';
-      this.notAcceptIconClass = 'drag-clone-icon not-accept';
-      return true;
-    }
-
-    // 检查并且初始化options
-
-  }, {
-    key: 'checkOptions',
-    value: function checkOptions(options) {
-      if (!options) {
-        return console.error('未检测到options 请参考相关说明' + _config.DOCUMENT_ADDR);
-      }
-      if (typeof options.onDrop !== 'function') {
-        return console.error('onDrop 必须是一个函数 请参考相关说明' + _config.DOCUMENT_ADDR);
-      }
-      if (options.condition && typeof options.condition !== 'function') {
-        return console.error('condition必须是一个函数 并且根据传入的data返回一个布尔值 请参考相关说明' + _config.DOCUMENT_ADDR);
-      }
-      var baseOptions = {
-        condition: function condition() {
-          return true;
-        }
-      };
-      for (var option in baseOptions) {
-        !options[options] && (options[options] = baseOptions[option]);
-      }
-      return options;
-    }
-  }, {
-    key: 'init',
-    value: function init() {
-      this.setStore();
-    }
-  }, {
-    key: 'setStore',
-    value: function setStore() {
-      var index = _store2.default.conditions.push(this.options.condition) - 1;
-      this.index = index;
-      _store2.default.targetOnDragStarts[index] = this.onDragStart.bind(this);
-      _store2.default.targetOnDragEnds[index] = this.onDragEnd.bind(this);
-      _store2.default.onDragEnters[index] = this.onDragEnter.bind(this);
-      _store2.default.onDragLeaves[index] = this.onDragLeave.bind(this);
-      _store2.default.onDrops[index] = this.onDrop.bind(this);
-      _store2.default.iconClasss[index] = { accept: this.acceptIconClass, notAccept: this.notAcceptIconClass };
-    }
-
-    // 目标监听到拖动开始
-
-  }, {
-    key: 'onDragStart',
-    value: function onDragStart(data, accept) {
-      console.log('目标监听到拖动开始');
-      this._active = false;
-      this._accept = accept;
-      this.setStorePositions();
-      this.emit('onDragStart', data, accept);
-    }
-
-    // 目标监听到拖动结束
-
-  }, {
-    key: 'onDragEnd',
-    value: function onDragEnd(inTarget, data) {
-      console.log('目标监听到拖动结束');
-      this.emit('onDragEnd', inTarget, data);
-    }
-
-    /**
-     * 目标监听到拖动进入当前范围
-     */
-
-  }, {
-    key: 'onDragEnter',
-    value: function onDragEnter(accept, data) {
-      console.log('目标监听到拖动进入当前范围');
-      this._active = true;
-      this._accept = accept;
-      this.emit('onDragEnter', accept, data);
-    }
-
-    // 目标监听到离开当前范围
-
-  }, {
-    key: 'onDragLeave',
-    value: function onDragLeave() {
-      console.log('目标监听到离开当前范围');
-      this._active = false;
-      this._accept = false;
-      this.emit('onDragLeave');
-    }
-
-    // 目标监听到被拖动元素在自己范围内放下
-
-  }, {
-    key: 'onDrop',
-    value: function onDrop(success, data) {
-      console.log('目标监听到放下成功');
-      this._active = false;
-      this._accept = false;
-      this.emit('drop', success, data);
-    }
-  }, {
-    key: 'setStorePositions',
-    value: function setStorePositions() {
-      var _getBoundingClientRec = (0, _dom.getBoundingClientRect)(this.el),
-          left = _getBoundingClientRec.left,
-          top = _getBoundingClientRec.top,
-          width = _getBoundingClientRec.width,
-          height = _getBoundingClientRec.height;
-
-      _store2.default.targetPositions[this.index] = {
-        top: top,
-        bottom: top + height,
-        left: left,
-        right: left + width
-      };
-    }
-  }, {
-    key: 'emit',
-    value: function emit() {
-      var _options;
-
-      var args = Array.from(arguments);
-      var functionName = args.shift();
-      typeof this.options[functionName] === 'function' && (_options = this.options)[functionName].apply(_options, _toConsumableArray(args));
-    }
-  }]);
-
-  return Drop;
-}();
-
-module.exports = Drop;
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -707,7 +247,40 @@ var dragStore = {
 exports.default = dragStore;
 
 /***/ }),
-/* 4 */
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.checkNode = checkNode;
+function checkNode(el) {
+  var result = el;
+  if (!result) {
+    return console.error('找不到当前节点', el);
+  }
+  if (typeof el === 'string') {
+    var domName = el;
+    result = document.querySelector(domName);
+    if (!result) {
+      return console.error('找不到当前节点', el);
+    }
+  } else if ((typeof el === 'undefined' ? 'undefined' : _typeof(el)) === 'object') {
+    if (!el.nodeName) {
+      return console.error('找不到当前节点', el);
+    }
+  }
+  return result;
+}
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -744,6 +317,433 @@ var getSize = exports.getSize = function getSize(node) {
 };
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _check = __webpack_require__(1);
+
+var _dom = __webpack_require__(2);
+
+var _store = __webpack_require__(0);
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Drag = function () {
+  function Drag(el, options) {
+    _classCallCheck(this, Drag);
+
+    this.initData(el, options) && this.init();
+  }
+
+  _createClass(Drag, [{
+    key: 'initData',
+    value: function initData(el, options) {
+      this.el = (0, _check.checkNode)(el);
+      if (!this.el) return;
+
+      this.el.style.userSelect = 'none';
+
+      this.options = this.checkOptions(options);
+      this.data = options.data;
+      this.mouseDownPosition = { left: -1, top: -1 };
+      this.mouseDragging = false;
+      this.backTime = 300;
+      this.mark = null;
+      this.position = { left: 0, top: 0 };
+      return true;
+    }
+  }, {
+    key: 'init',
+    value: function init() {
+      this.addEventListener();
+    }
+  }, {
+    key: 'addEventListener',
+    value: function addEventListener() {
+      var _this = this;
+
+      var dom = this.el;
+      // 监听当前节点的鼠标点击事件
+      dom.addEventListener('mousedown', function (e) {
+        var pageX = e.pageX,
+            pageY = e.pageY;
+
+        _this.mouseDownPosition = { left: pageX, top: pageY };
+        dom.onmousemove = _this.onElMousemove.bind(_this);
+        dom.onmouseup = _this.onElMouseUp.bind(_this);
+        document.addEventListener('mouseup', _this.onElMouseUp.bind(_this));
+      });
+    }
+  }, {
+    key: 'onElMousemove',
+    value: function onElMousemove() {
+      if (this.mouseDragging) return;
+      this.mouseDragging = true;
+
+      _store2.default.data = this.data;
+      this.el.style.opacity = '0.5';
+      this.position = (0, _dom.getBoundingClientRect)(this.el);
+      // 创建蒙层
+      this.mark = document.createElement('div');
+      this.mark.className = 'x-drag-mark';
+      this.setMarkStyle();
+      this.mark.onmousemove = this.onMarkMouseMove.bind(this);
+      this.mark.onmouseup = this.onMarkMouseUp.bind(this);
+      // this.mark.onmouseleave = this.onMarkMouseUp.bind(this)
+      document.body.appendChild(this.mark);
+      // 创建复制元素
+      _store2.default.cloneDom = this.el.cloneNode(true);
+      this.setCloneDomStyle();
+      this.mark.appendChild(_store2.default.cloneDom);
+
+      // 创建状态icon
+      _store2.default.stateIcon = document.createElement('i');
+      this.setIconStyle();
+      this.mark.appendChild(_store2.default.stateIcon);
+
+      this.emit('onDragStart');
+    }
+  }, {
+    key: 'onElMouseUp',
+    value: function onElMouseUp() {
+      this.mouseDragging = false;
+      this.el.onmousemove = null;
+      this.el.onmouseup = null;
+      this.mark && (this.mark.onmousemove = null);
+      this.mark && (this.mark.onmouseup = null);
+      document.removeEventListener('mouseup', this.onElMouseUp.bind(this));
+    }
+  }, {
+    key: 'onMarkMouseMove',
+    value: function onMarkMouseMove(e) {
+      if (!_store2.default.cloneDom) return;
+      var pageX = e.pageX,
+          pageY = e.pageY;
+
+      var translateX = pageX - this.mouseDownPosition.left;
+      var translateY = pageY - this.mouseDownPosition.top;
+      _store2.default.cloneDom.style.transform = 'translate(' + translateX + 'px,' + translateY + 'px)';
+      _store2.default.mousePosition = [pageX, pageY];
+    }
+  }, {
+    key: 'onMarkMouseUp',
+    value: function onMarkMouseUp() {
+      document.removeEventListener('mouseup', this.onElMouseUp.bind(this));
+      this.mouseDragging = false;
+      this.mark.onmousemove = null;
+      this.el.onmousemove = null;
+
+      this.mark.style.cursor = 'auto';
+      var style = _store2.default.cloneDom && _store2.default.cloneDom.style;
+      if (!style) return;
+      // 复制的dom的动画效果
+      if (_store2.default.canBack) {
+        style.transition = 'all ' + this.backTime / 1000 + 's cubic-bezier(0.2,0.4,0.25,1.1)';
+        style.transform = 'translate(0,0)';
+        setTimeout(this.removeMark.bind(this), this.backTime);
+      } else {
+        if (this.options.removeanimationtype === 0 && !_store2.default._inTarget) {
+          // 删除动画类型0 渐渐消失
+          style.transition = 'all 0.1s ease';
+          style.opacity = '0';
+          setTimeout(this.removeMark.bind(this), 200);
+        } else if (this.options.removeanimationtype === 1 && !_store2.default._inTarget) {
+          // 删除动画类型1 爆炸
+          style.transition = 'all 0.1s ease';
+          style.boxShadow = '0 0 50px 30px rgba(0,0,0,0.3)';
+          style.opacity = '0';
+          setTimeout(this.removeMark.bind(this), 100);
+        } else {
+          this.removeMark();
+        }
+      }
+      // 1是否会返回, 2源数据, 3是否在目标内, 4拓展参数
+      this.emit('onDragEnd', {
+        isBack: _store2.default.canBack,
+        data: this.data,
+        inTarget: _store2.default._targetIndex > -1
+      });
+      _store2.default.data = null;
+    }
+  }, {
+    key: 'removeMark',
+    value: function removeMark() {
+      try {
+        document.body.removeChild(this.mark);
+        _store2.default.cloneDom = null;
+        this.el.style.opacity = '1';
+      } catch (e) {
+        console.log('出错', e);
+      }
+    }
+
+    // 检查并且初始化options
+
+  }, {
+    key: 'checkOptions',
+    value: function checkOptions(options) {
+      options = options || {};
+      var baseOptions = {
+        data: '这里可以放需要丢给目标的内容',
+        removeanimationtype: 1
+      };
+      for (var option in baseOptions) {
+        !options[options] && (options[options] = baseOptions[option]);
+      }
+      return options;
+    }
+  }, {
+    key: 'setMarkStyle',
+    value: function setMarkStyle() {
+      var markStyle = {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        background: 'rgba(0,0,0,0.1)',
+        zIndex: '10',
+        cursor: 'move'
+      };
+      for (var style in markStyle) {
+        this.mark.style[style] = markStyle[style];
+      }
+    }
+  }, {
+    key: 'setCloneDomStyle',
+    value: function setCloneDomStyle() {
+      var dom = _store2.default.cloneDom;
+      var style = dom.style;
+      var _position = this.position,
+          left = _position.left,
+          top = _position.top;
+
+      style.position = 'absolute';
+      style.left = left + 'px';
+      style.top = top + 'px';
+      style.opacity = '1';
+      style.transform = 'translate(0,0)';
+      style.cursor = 'move';
+      style.zIndex = 10;
+    }
+  }, {
+    key: 'setIconStyle',
+    value: function setIconStyle() {
+      var style = _store2.default.stateIcon.style;
+      style.display = 'none';
+      style.position = 'absolute';
+      style.width = '20px';
+      style.height = '20px';
+      style.zIndex = '100';
+      // style.borderRadius = '20px'
+      // style.border = '2px solid #fff'
+      // style.boxSizing = 'border-box'
+    }
+  }, {
+    key: 'emit',
+    value: function emit() {
+      var _options;
+
+      var args = Array.from(arguments);
+      var functionName = args.shift();
+      typeof this.options[functionName] === 'function' && (_options = this.options)[functionName].apply(_options, _toConsumableArray(args));
+    }
+  }]);
+
+  return Drag;
+}();
+
+module.exports = Drag;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _check = __webpack_require__(1);
+
+var _dom = __webpack_require__(2);
+
+var _config = __webpack_require__(5);
+
+var _store = __webpack_require__(0);
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Drop = function () {
+  function Drop(el, options) {
+    _classCallCheck(this, Drop);
+
+    this.initData(el, options) && this.init();
+  }
+
+  _createClass(Drop, [{
+    key: 'initData',
+    value: function initData(el, options) {
+      this.el = (0, _check.checkNode)(el);
+      if (!this.el) return;
+      this.options = this.checkOptions(options);
+      if (!this.options) return;
+
+      this._active = false; // 是否进入当前范围
+      this._accept = false; // 是否同意
+      this.index = -1; // 当前索引
+      this.acceptIconClass = 'drag-clone-icon accept';
+      this.notAcceptIconClass = 'drag-clone-icon not-accept';
+      return true;
+    }
+
+    // 检查并且初始化options
+
+  }, {
+    key: 'checkOptions',
+    value: function checkOptions(options) {
+      if (!options) {
+        return console.error('未检测到options 请参考相关说明' + _config.DOCUMENT_ADDR);
+      }
+      if (typeof options.onDrop !== 'function') {
+        return console.error('onDrop 必须是一个函数 请参考相关说明' + _config.DOCUMENT_ADDR);
+      }
+      if (options.condition && typeof options.condition !== 'function') {
+        return console.error('condition必须是一个函数 并且根据传入的data返回一个布尔值 请参考相关说明' + _config.DOCUMENT_ADDR);
+      }
+      var baseOptions = {
+        condition: function condition() {
+          return true;
+        }
+      };
+      for (var option in baseOptions) {
+        !options[options] && (options[options] = baseOptions[option]);
+      }
+      return options;
+    }
+  }, {
+    key: 'init',
+    value: function init() {
+      this.setStore();
+    }
+  }, {
+    key: 'setStore',
+    value: function setStore() {
+      var index = _store2.default.conditions.push(this.options.condition) - 1;
+      this.index = index;
+      _store2.default.targetOnDragStarts[index] = this.onDragStart.bind(this);
+      _store2.default.targetOnDragEnds[index] = this.onDragEnd.bind(this);
+      _store2.default.onDragEnters[index] = this.onDragEnter.bind(this);
+      _store2.default.onDragLeaves[index] = this.onDragLeave.bind(this);
+      _store2.default.onDrops[index] = this.onDrop.bind(this);
+      _store2.default.iconClasss[index] = { accept: this.acceptIconClass, notAccept: this.notAcceptIconClass };
+    }
+
+    // 目标监听到拖动开始
+
+  }, {
+    key: 'onDragStart',
+    value: function onDragStart(data, accept) {
+      console.log('目标监听到拖动开始');
+      this._active = false;
+      this._accept = accept;
+      this.setStorePositions();
+      this.emit('onDragStart', data, accept);
+    }
+
+    // 目标监听到拖动结束
+
+  }, {
+    key: 'onDragEnd',
+    value: function onDragEnd(inTarget, data) {
+      console.log('目标监听到拖动结束');
+      this.emit('onDragEnd', inTarget, data);
+    }
+
+    /**
+     * 目标监听到拖动进入当前范围
+     */
+
+  }, {
+    key: 'onDragEnter',
+    value: function onDragEnter(accept, data) {
+      console.log('目标监听到拖动进入当前范围');
+      this._active = true;
+      this._accept = accept;
+      this.emit('onDragEnter', accept, data);
+    }
+
+    // 目标监听到离开当前范围
+
+  }, {
+    key: 'onDragLeave',
+    value: function onDragLeave() {
+      console.log('目标监听到离开当前范围');
+      this._active = false;
+      this._accept = false;
+      this.emit('onDragLeave');
+    }
+
+    // 目标监听到被拖动元素在自己范围内放下
+
+  }, {
+    key: 'onDrop',
+    value: function onDrop(success, data) {
+      console.log('目标监听到放下成功');
+      this._active = false;
+      this._accept = false;
+      this.emit('drop', success, data);
+    }
+  }, {
+    key: 'setStorePositions',
+    value: function setStorePositions() {
+      var _getBoundingClientRec = (0, _dom.getBoundingClientRect)(this.el),
+          left = _getBoundingClientRec.left,
+          top = _getBoundingClientRec.top,
+          width = _getBoundingClientRec.width,
+          height = _getBoundingClientRec.height;
+
+      _store2.default.targetPositions[this.index] = {
+        top: top,
+        bottom: top + height,
+        left: left,
+        right: left + width
+      };
+    }
+  }, {
+    key: 'emit',
+    value: function emit() {
+      var _options;
+
+      var args = Array.from(arguments);
+      var functionName = args.shift();
+      typeof this.options[functionName] === 'function' && (_options = this.options)[functionName].apply(_options, _toConsumableArray(args));
+    }
+  }]);
+
+  return Drop;
+}();
+
+module.exports = Drop;
+
+/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -753,12 +753,24 @@ var getSize = exports.getSize = function getSize(node) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var DOCUMENT_ADDR = exports.DOCUMENT_ADDR = '';
 
-var _drag = __webpack_require__(1);
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _drag = __webpack_require__(3);
 
 var _drag2 = _interopRequireDefault(_drag);
 
-var _drop = __webpack_require__(2);
+var _drop = __webpack_require__(4);
 
 var _drop2 = _interopRequireDefault(_drop);
 
@@ -783,18 +795,6 @@ exports.default = { Drag: _drag2.default, Drop: _drop2.default };
 // if ( typeof window === "object" && typeof window.document === "object" ) {
 //     window.jQuery = window.$ = jQuery;
 // }
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var DOCUMENT_ADDR = exports.DOCUMENT_ADDR = '';
 
 /***/ })
 /******/ ]);

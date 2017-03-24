@@ -99,19 +99,19 @@ class Drag {
     if (store.canBack) {
       style.transition = `all ${this.backTime / 1000}s cubic-bezier(0.2,0.4,0.25,1.1)`
       style.transform = 'translate(0,0)'
-      setTimeout(this.removeMark, this.backTime)
+      setTimeout(this.removeMark.bind(this), this.backTime)
     } else {
       if (this.options.removeanimationtype === 0 && !store._inTarget) {
         // 删除动画类型0 渐渐消失
         style.transition = 'all 0.1s ease'
         style.opacity = '0'
-        setTimeout(this.removeMark, 200)
+        setTimeout(this.removeMark.bind(this), 200)
       } else if (this.options.removeanimationtype === 1 && !store._inTarget) {
         // 删除动画类型1 爆炸
         style.transition = 'all 0.1s ease'
         style.boxShadow = '0 0 50px 30px rgba(0,0,0,0.3)'
         style.opacity = '0'
-        setTimeout(this.removeMark, 100)
+        setTimeout(this.removeMark.bind(this), 100)
       } else {
         this.removeMark()
       }
@@ -131,7 +131,7 @@ class Drag {
       store.cloneDom = null
       this.el.style.opacity = '1'
     } catch (e) {
-      //
+      console.log('出错', e)
     }
   }
 
