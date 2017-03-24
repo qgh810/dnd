@@ -400,7 +400,7 @@ var Drag = function () {
       this.setMarkStyle();
       this.mark.onmousemove = this.onMarkMouseMove.bind(this);
       this.mark.onmouseup = this.onMarkMouseUp.bind(this);
-      // this.mark.onmouseleave = this.onMarkMouseUp.bind(this)
+      this.mark.onmouseleave = this.onMarkMouseUp.bind(this);
       document.body.appendChild(this.mark);
       // 创建复制元素
       _store2.default.cloneDom = this.el.cloneNode(true);
@@ -546,6 +546,7 @@ var Drag = function () {
       style.width = '20px';
       style.height = '20px';
       style.zIndex = '100';
+
       // style.borderRadius = '20px'
       // style.border = '2px solid #fff'
       // style.boxSizing = 'border-box'
