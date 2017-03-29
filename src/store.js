@@ -2,7 +2,8 @@ import IMAGES from './icon-images'
 import { REMOVE_ANIMATION_TYPES } from './config'
 
 const dragStore = {
-  /* ********** drag设置的变量 *************/
+  /* ********** 被拖元素drag设置的变量 *************/
+  //
   data: null,
   draggedNode: null,
   sourceNode: null,
@@ -25,6 +26,9 @@ const dragStore = {
   _prevValidIndex: -1,
   _inTarget: false,
 
+  /**
+   * 监听拖动开始
+   */
   onDragStart (data, el) {
     this._initStore()
     this.sourceNode = el
@@ -40,6 +44,9 @@ const dragStore = {
     }))
   },
 
+  /**
+   * 初始化store状态
+   */
   _initStore () {
     this._inTarget = false
     this._prevValidIndex = -1
@@ -47,6 +54,9 @@ const dragStore = {
     this.hideStateicon()
   },
 
+  /**
+   * 监听拖动
+   */
   onDragMove (pageX, pageY) {
     this.mousePosition = [pageX, pageY]
     this.targetIndex = this.collision(pageX, pageY)
@@ -96,6 +106,9 @@ const dragStore = {
     }
   },
 
+  /**
+   * 监听拖动结束
+   */
   onDragEnd () {
     // 触发放置事件
     if (this.targetIndex >= 0) {
@@ -125,7 +138,9 @@ const dragStore = {
     })
   },
 
-  // 碰撞检测函数
+  /**
+   * 碰撞检测函数
+   */
   collision (pageX, pageY) {
     let targetIndex = -1
     // 碰撞检测
@@ -147,12 +162,18 @@ const dragStore = {
     return targetIndex
   },
 
+  /**
+   * 设置状态icon位置跟随鼠标
+   */
   setIconPosition (x, y) {
     let style = this.stateIcon.style
     style.left = x + 8 + 'px'
     style.top = y + 'px'
   },
 
+  /**
+   * 显示状态icon
+   */
   showStateicon (url) {
     url = IMAGES[url] || url || ''
     let iconStyle = this.stateIcon.style
@@ -160,12 +181,20 @@ const dragStore = {
     iconStyle.background = `no-repeat url(${url}) center center / 100% auto`
   },
 
+  /**
+   * 隐藏状态icon
+   */
   hideStateicon () {
     try {
       this.stateIcon.style.display = 'none'
     } catch (e) {}
   },
 
+  /**
+   * 移除被拖动的节点
+   * type 动画类型 不传则无动画直接消失 可选 fade | blost | back
+   * time 动画持续时长 非必填
+   */
   removeDragedNode (type, time) {
     if (!type) return this.removeMark()
     if (!REMOVE_ANIMATION_TYPES[type]) return this.removeMark()
@@ -175,6 +204,10 @@ const dragStore = {
     this[REMOVE_ANIMATION_TYPES[type]](time)
   },
 
+  /**
+   * 动画 褪色
+   * @type {[time]} 动画时间 单位毫秒
+   */
   [REMOVE_ANIMATION_TYPES.fade] (time = 150) {
     let style = this.draggedNode && this.draggedNode.style
     if (!style) return
@@ -183,6 +216,10 @@ const dragStore = {
     setTimeout(this.removeMark.bind(this), time)
   },
 
+  /**
+   * 动画 爆炸
+   * @type {[time]} 动画时间 单位毫秒
+   */
   [REMOVE_ANIMATION_TYPES.blost] (time = 150) {
     console.log('yeah')
     let style = this.draggedNode && this.draggedNode.style
@@ -193,6 +230,10 @@ const dragStore = {
     setTimeout(this.removeMark.bind(this), time)
   },
 
+  /**
+   * 动画 返回
+   * @type {[time]} 动画时间 单位毫秒
+   */
   [REMOVE_ANIMATION_TYPES.back] (time = 300) {
     let style = this.draggedNode && this.draggedNode.style
     if (!style) return
@@ -201,7 +242,9 @@ const dragStore = {
     setTimeout(this.removeMark.bind(this), time)
   },
 
-  // 移除蒙层
+  /**
+   * 移除蒙层
+   */
   removeMark () {
     clearTimeout(this.removeMarkTid)
     this.removeMarkTid = setTimeout(() => {
@@ -215,6 +258,10 @@ const dragStore = {
     }, 10)
   },
 
+  /**
+   * 销毁实例
+   * name 实例名称
+   */
   destroyDrop (name) {
     this.targets.forEach((item, i) => {
       if (item.name === name) {
@@ -223,6 +270,9 @@ const dragStore = {
     })
   },
 
+  /**
+   * 删除状态中的某个Drop相关数据
+   */
   removeDrop (index) {
     delete this.targets[index]
     delete this.targetOnDragStarts[index]
@@ -234,6 +284,9 @@ const dragStore = {
     delete this.targetPositions[index]
   },
 
+  /**
+   * 获取状态icon节点
+   */
   getStateIconNode () {
     return this.stateIcon
   }
@@ -241,6 +294,9 @@ const dragStore = {
 
 export default dragStore
 
+/**
+ * 供用户调用的静态方法
+ */
 export const methods = {
   showStateicon: dragStore.showStateicon.bind(dragStore),
   hideStateicon: dragStore.hideStateicon.bind(dragStore),

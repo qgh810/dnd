@@ -91,7 +91,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var dragStore = (_dragStore = {
-  /* ********** drag设置的变量 *************/
+  /* ********** 被拖元素drag设置的变量 *************/
+  //
   data: null,
   draggedNode: null,
   sourceNode: null,
@@ -114,6 +115,9 @@ var dragStore = (_dragStore = {
   _prevValidIndex: -1,
   _inTarget: false,
 
+  /**
+   * 监听拖动开始
+   */
   onDragStart: function onDragStart(data, el) {
     var _this = this;
 
@@ -132,12 +136,22 @@ var dragStore = (_dragStore = {
       });
     });
   },
+
+
+  /**
+   * 初始化store状态
+   */
   _initStore: function _initStore() {
     this._inTarget = false;
     this._prevValidIndex = -1;
     this.targetIndex = -1;
     this.hideStateicon();
   },
+
+
+  /**
+   * 监听拖动
+   */
   onDragMove: function onDragMove(pageX, pageY) {
     this.mousePosition = [pageX, pageY];
     this.targetIndex = this.collision(pageX, pageY);
@@ -186,6 +200,11 @@ var dragStore = (_dragStore = {
       }
     }
   },
+
+
+  /**
+   * 监听拖动结束
+   */
   onDragEnd: function onDragEnd() {
     var _this2 = this;
 
@@ -218,7 +237,9 @@ var dragStore = (_dragStore = {
   },
 
 
-  // 碰撞检测函数
+  /**
+   * 碰撞检测函数
+   */
   collision: function collision(pageX, pageY) {
     var targetIndex = -1;
     // 碰撞检测
@@ -234,22 +255,44 @@ var dragStore = (_dragStore = {
 
     return targetIndex;
   },
+
+
+  /**
+   * 设置状态icon位置跟随鼠标
+   */
   setIconPosition: function setIconPosition(x, y) {
     var style = this.stateIcon.style;
     style.left = x + 8 + 'px';
     style.top = y + 'px';
   },
+
+
+  /**
+   * 显示状态icon
+   */
   showStateicon: function showStateicon(url) {
     url = _iconImages2.default[url] || url || '';
     var iconStyle = this.stateIcon.style;
     iconStyle.display = 'block';
     iconStyle.background = 'no-repeat url(' + url + ') center center / 100% auto';
   },
+
+
+  /**
+   * 隐藏状态icon
+   */
   hideStateicon: function hideStateicon() {
     try {
       this.stateIcon.style.display = 'none';
     } catch (e) {}
   },
+
+
+  /**
+   * 移除被拖动的节点
+   * type 动画类型 不传则无动画直接消失 可选 fade | blost | back
+   * time 动画持续时长 非必填
+   */
   removeDragedNode: function removeDragedNode(type, time) {
     var _this3 = this;
 
@@ -321,6 +364,11 @@ var dragStore = (_dragStore = {
 }), _dragStore);
 
 exports.default = dragStore;
+
+/**
+ * 供用户调用的静态方法
+ */
+
 var methods = exports.methods = {
   showStateicon: dragStore.showStateicon.bind(dragStore),
   hideStateicon: dragStore.hideStateicon.bind(dragStore),
@@ -429,6 +477,11 @@ var Drag = function () {
     this.initData(el, options) && this.init();
   }
 
+  /**
+   * 检查和初始化传入参数
+   */
+
+
   _createClass(Drag, [{
     key: 'initData',
     value: function initData(el, options) {
@@ -446,11 +499,19 @@ var Drag = function () {
       this.position = { left: 0, top: 0 };
       return true;
     }
+
+    // 初始化
+
   }, {
     key: 'init',
     value: function init() {
       this.addEventListener();
     }
+
+    /**
+     * 事件监听
+     */
+
   }, {
     key: 'addEventListener',
     value: function addEventListener() {
@@ -468,6 +529,11 @@ var Drag = function () {
         document.addEventListener('mouseup', _this.onElMouseUp.bind(_this));
       });
     }
+
+    /**
+     * 监听拖动开始
+     */
+
   }, {
     key: 'onElMousemove',
     value: function onElMousemove() {
@@ -502,6 +568,11 @@ var Drag = function () {
         methods: _store.methods
       });
     }
+
+    /**
+     * 监听拖动结束
+     */
+
   }, {
     key: 'onElMouseUp',
     value: function onElMouseUp() {
@@ -512,6 +583,11 @@ var Drag = function () {
       this.mark && (this.mark.onmouseup = null);
       document.removeEventListener('mouseup', this.onElMouseUp.bind(this));
     }
+
+    /**
+     * 监听蒙层鼠标移动
+     */
+
   }, {
     key: 'onMarkMouseMove',
     value: function onMarkMouseMove(e) {
@@ -524,6 +600,11 @@ var Drag = function () {
       _store2.default.draggedNode.style.transform = 'translate(' + translateX + 'px,' + translateY + 'px)';
       _store2.default.onDragMove(pageX, pageY);
     }
+
+    /**
+     * 监听蒙层鼠标放开
+     */
+
   }, {
     key: 'onMarkMouseUp',
     value: function onMarkMouseUp() {
@@ -540,7 +621,9 @@ var Drag = function () {
       _store2.default.onDragEnd();
     }
 
-    // 检查并且初始化options
+    /**
+     * 检查并且初始化options
+     */
 
   }, {
     key: 'checkOptions',
@@ -556,6 +639,11 @@ var Drag = function () {
       }
       return options;
     }
+
+    /**
+     * 设置蒙层样式
+     */
+
   }, {
     key: 'setMarkStyle',
     value: function setMarkStyle() {
@@ -571,6 +659,11 @@ var Drag = function () {
         this.mark.style[style] = markStyle[style];
       }
     }
+
+    /**
+     * 设置克隆节点样式
+     */
+
   }, {
     key: 'setCloneNodeStyle',
     value: function setCloneNodeStyle() {
@@ -586,6 +679,11 @@ var Drag = function () {
       style.transform = 'translate(0,0)';
       style.zIndex = 1000;
     }
+
+    /**
+     * 设置状态icon样式
+     */
+
   }, {
     key: 'setIconStyle',
     value: function setIconStyle() {
@@ -596,6 +694,11 @@ var Drag = function () {
       style.height = '20px';
       style.zIndex = '10001';
     }
+
+    /**
+     * 发布事件
+     */
+
   }, {
     key: 'emit',
     value: function emit() {
@@ -644,6 +747,11 @@ var Drop = function () {
     this.initData(el, options) && this.init();
   }
 
+  /**
+   * 检查并初始化传入参数
+   */
+
+
   _createClass(Drop, [{
     key: 'initData',
     value: function initData(el, options) {
@@ -656,7 +764,9 @@ var Drop = function () {
       return true;
     }
 
-    // 检查并且初始化options
+    /**
+     * 检查并且初始化options
+     */
 
   }, {
     key: 'checkOptions',
@@ -678,11 +788,21 @@ var Drop = function () {
       }
       return options;
     }
+
+    /**
+     * 初始化
+     */
+
   }, {
     key: 'init',
     value: function init() {
       this.setStore();
     }
+
+    /**
+     * 托管状态
+     */
+
   }, {
     key: 'setStore',
     value: function setStore() {
@@ -700,7 +820,9 @@ var Drop = function () {
       _store2.default.onDrops[index] = this.onDrop.bind(this);
     }
 
-    // 目标监听到拖动开始
+    /**
+     * 目标监听到拖动开始
+     */
 
   }, {
     key: 'onDragStart',
@@ -709,7 +831,9 @@ var Drop = function () {
       this.emit('onDragStart', params);
     }
 
-    // 目标监听到拖动结束
+    /**
+     * 目标监听到拖动结束
+     */
 
   }, {
     key: 'onDragEnd',
@@ -727,13 +851,20 @@ var Drop = function () {
     value: function onDragEnter(params) {
       this.emit('onDragEnter', params);
     }
+
+    /**
+     * 目标监听在自己上方拖动
+     */
+
   }, {
     key: 'onDragMove',
     value: function onDragMove(params) {
       this.emit('onDragMove', params);
     }
 
-    // 目标监听到离开当前范围
+    /**
+     * 目标监听到离开当前范围
+     */
 
   }, {
     key: 'onDragLeave',
@@ -741,13 +872,20 @@ var Drop = function () {
       this.emit('onDragLeave', params);
     }
 
-    // 目标监听到被拖动元素在自己范围内放下
+    /**
+     * 目标监听到被拖动元素在自己范围内放下
+     */
 
   }, {
     key: 'onDrop',
     value: function onDrop(params) {
       this.emit('onDrop', params);
     }
+
+    /**
+     * 托管当前位置信息
+     */
+
   }, {
     key: 'setStorePositions',
     value: function setStorePositions() {
@@ -764,6 +902,11 @@ var Drop = function () {
         right: left + width
       };
     }
+
+    /**
+     * 发布事件
+     */
+
   }, {
     key: 'emit',
     value: function emit() {

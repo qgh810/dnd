@@ -8,6 +8,9 @@ class Drop {
     this.initData(el, options) && this.init()
   }
 
+  /**
+   * 检查并初始化传入参数
+   */
   initData (el, options) {
     this.el = checkNode(el)
     if (!this.el) return
@@ -18,7 +21,9 @@ class Drop {
     return true
   }
 
-  // 检查并且初始化options
+  /**
+   * 检查并且初始化options
+   */
   checkOptions (options) {
     if (!options) {
       return console.error(this.el, '未检测到options 请参考相关说明' + DOCUMENT_ADDR)
@@ -38,10 +43,16 @@ class Drop {
     return options
   }
 
+  /**
+   * 初始化
+   */
   init () {
     this.setStore()
   }
 
+  /**
+   * 托管状态
+   */
   setStore () {
     let index = store.targets.push({
       el: this.el,
@@ -57,13 +68,17 @@ class Drop {
     store.onDrops[index] = this.onDrop.bind(this)
   }
 
-  // 目标监听到拖动开始
+  /**
+   * 目标监听到拖动开始
+   */
   onDragStart (params) {
     this.setStorePositions()
     this.emit('onDragStart', params)
   }
 
-  // 目标监听到拖动结束
+  /**
+   * 目标监听到拖动结束
+   */
   onDragEnd (params) {
     this.emit('onDragEnd', params)
     params.methods.removeDragedNode()
@@ -76,21 +91,30 @@ class Drop {
     this.emit('onDragEnter', params)
   }
 
+  /**
+   * 目标监听在自己上方拖动
+   */
   onDragMove (params) {
     this.emit('onDragMove', params)
   }
 
-  // 目标监听到离开当前范围
+  /**
+   * 目标监听到离开当前范围
+   */
   onDragLeave (params) {
     this.emit('onDragLeave', params)
   }
 
-  // 目标监听到被拖动元素在自己范围内放下
+  /**
+   * 目标监听到被拖动元素在自己范围内放下
+   */
   onDrop (params) {
     this.emit('onDrop', params)
   }
 
-
+  /**
+   * 托管当前位置信息
+   */
   setStorePositions () {
     let {left, top, width, height} = getBoundingClientRect(this.el)
     store.targetPositions[this.index] = {
@@ -101,6 +125,9 @@ class Drop {
     }
   }
 
+  /**
+   * 发布事件
+   */
   emit () {
     let args = Array.from(arguments)
     let functionName = args.shift()

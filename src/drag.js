@@ -8,6 +8,9 @@ class Drag {
     this.initData(el, options) && this.init()
   }
 
+  /**
+   * 检查和初始化传入参数
+   */
   initData (el, options) {
     this.el = checkNode(el)
     if (!this.el) return
@@ -24,10 +27,14 @@ class Drag {
     return true
   }
 
+  // 初始化
   init () {
     this.addEventListener()
   }
 
+  /**
+   * 事件监听
+   */
   addEventListener () {
     let dom = this.el
     // 监听当前节点的鼠标点击事件
@@ -40,6 +47,9 @@ class Drag {
     })
   }
 
+  /**
+   * 监听拖动开始
+   */
   onElMousemove () {
     if (this.mouseDragging) return
     this.mouseDragging = true
@@ -73,6 +83,9 @@ class Drag {
     })
   }
 
+  /**
+   * 监听拖动结束
+   */
   onElMouseUp () {
     this.mouseDragging = false
     this.el.onmousemove = null
@@ -82,6 +95,9 @@ class Drag {
     document.removeEventListener('mouseup', this.onElMouseUp.bind(this))
   }
 
+  /**
+   * 监听蒙层鼠标移动
+   */
   onMarkMouseMove (e) {
     if (!store.draggedNode) return
     let {pageX, pageY} = e
@@ -91,6 +107,9 @@ class Drag {
     store.onDragMove(pageX, pageY)
   }
 
+  /**
+   * 监听蒙层鼠标放开
+   */
   onMarkMouseUp () {
     document.removeEventListener('mouseup', this.onElMouseUp.bind(this))
     this.mouseDragging = false
@@ -105,7 +124,9 @@ class Drag {
     store.onDragEnd()
   }
 
-  // 检查并且初始化options
+  /**
+   * 检查并且初始化options
+   */
   checkOptions (options) {
     options = options || {}
     let baseOptions = {
@@ -119,6 +140,9 @@ class Drag {
     return options
   }
 
+  /**
+   * 设置蒙层样式
+   */
   setMarkStyle () {
     let markStyle = {
       position: 'absolute',
@@ -133,6 +157,9 @@ class Drag {
     }
   }
 
+  /**
+   * 设置克隆节点样式
+   */
   setCloneNodeStyle () {
     let dom = store.draggedNode
     let style = dom.style
@@ -144,6 +171,9 @@ class Drag {
     style.zIndex = 1000
   }
 
+  /**
+   * 设置状态icon样式
+   */
   setIconStyle () {
     let style = store.stateIcon.style
     style.display = 'none'
@@ -153,6 +183,9 @@ class Drag {
     style.zIndex = '10001'
   }
 
+  /**
+   * 发布事件
+   */
   emit () {
     let args = Array.from(arguments)
     let functionName = args.shift()
