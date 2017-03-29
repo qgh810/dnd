@@ -1,6 +1,6 @@
 {
   "name": "draggable.js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "drag and drop",
   "main": "dist/draggable.js",
   "scripts": {

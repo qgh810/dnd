@@ -85,6 +85,7 @@
         name: '111',
         onDragEnter: function (params) {
           console.log(params)
+          params.methods.showStateicon('delete')
         },
         onDrop: function (params) {
           console.log('监听到有东西放下')

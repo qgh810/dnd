@@ -30,7 +30,7 @@ class Drag {
   // 初始化
   init () {
     this.addEventListenerPC()
-    this.addEventListenerMB()
+    this.addEventListenerMobile()
   }
 
   /**
@@ -49,7 +49,7 @@ class Drag {
     dom.addEventListener('mousedown', onMouseDowm.bind(this))
   }
 
-  addEventListenerMB () {
+  addEventListenerMobile () {
     // 兼容移动端
     this.el.addEventListener('touchmove', this.onElTouchMove.bind(this))
     this.el.addEventListener('touchend', this.onElTouchEnd.bind(this))
@@ -136,6 +136,7 @@ class Drag {
 
 
   onElTouchMove (e) {
+    store.isMobile = true
     if (this.mouseDownPosition.left === -1) {
       let {pageX, pageY} = e.touches[0]
       this.mouseDownPosition.left = pageX

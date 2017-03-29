@@ -1,9 +1,10 @@
 import IMAGES from './icon-images'
-import { REMOVE_ANIMATION_TYPES } from './config'
+import { REMOVE_ANIMATION_TYPES, DOCUMENT_ADDR } from './config'
 
 const dragStore = {
   /* ********** 被拖元素drag设置的变量 *************/
   //
+  isMobile: false,
   data: null,
   draggedNode: null,
   sourceNode: null,
@@ -176,6 +177,7 @@ const dragStore = {
    * url 可以是图片绝对路径 也可以是 add | reject | delete
    */
   showStateicon (url) {
+    if (this.isMobile) return console.warn('showStateicon仅在pc端口可用 请参考相关说明' + DOCUMENT_ADDR)
     url = IMAGES[url] || url || 'add'
     let iconStyle = this.stateIcon.style
     iconStyle.display = 'block'
