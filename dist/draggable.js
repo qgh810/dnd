@@ -78,13 +78,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.methods = undefined;
 
+var _dragStore;
+
 var _iconImages = __webpack_require__(7);
 
 var _iconImages2 = _interopRequireDefault(_iconImages);
 
+var _config = __webpack_require__(5);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var dragStore = {
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var dragStore = (_dragStore = {
   /* ********** drag设置的变量 *************/
   data: null,
   draggedNode: null,
@@ -189,47 +195,43 @@ var dragStore = {
       this.stateIcon.style.display = 'none';
     } catch (e) {}
   },
-  hideDragedNode: function hideDragedNode(type) {
-    switch (type) {
-      case 'blost':
-        this.blost();
-        break;
-      case 'fade':
-        this.blost();
-        break;
-      default:
-        this.removeMark();
-        break;
-    }
-  },
-  fade: function fade() {
-    console.log(123123);
-    var style = this.draggedNode && this.draggedNode.style;
-    if (!style) return;
-    style.transition = 'all 0.15s ease';
-    style.opacity = '0';
-    setTimeout(this.removeMark.bind(this), 150);
-  },
-  blost: function blost() {
-    var style = this.draggedNode && this.draggedNode.style;
-    if (!style) return;
-    style.transition = 'all 0.15s ease';
-    style.boxShadow = '0 0 50px 30px rgba(0,0,0,0.3)';
-    style.opacity = '0';
-    setTimeout(this.removeMark.bind(this), 150);
-  },
-
-
-  // 移除蒙层
-  removeMark: function removeMark() {
-    try {
-      document.body.removeChild(this.markNode);
-      this.draggedNode = null;
-    } catch (e) {
-      // console.log('出错', e)
-    }
+  hideDragedNode: function hideDragedNode(type, time) {
+    if (!type) return this.removeMark();
+    _config.REMOVE_ANIMATION_TYPES[type] && this[_config.REMOVE_ANIMATION_TYPES[type]](time);
   }
-};
+}, _defineProperty(_dragStore, _config.REMOVE_ANIMATION_TYPES.fade, function () {
+  var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 150;
+
+  var style = this.draggedNode && this.draggedNode.style;
+  if (!style) return;
+  style.transition = 'all ' + time / 1000 + 's ease';
+  style.opacity = '0';
+  setTimeout(this.removeMark.bind(this), time);
+}), _defineProperty(_dragStore, _config.REMOVE_ANIMATION_TYPES.blost, function () {
+  var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 150;
+
+  var style = this.draggedNode && this.draggedNode.style;
+  if (!style) return;
+  style.transition = 'all ' + time / 1000 + 's ease';
+  style.boxShadow = '0 0 50px 30px rgba(0,0,0,0.3)';
+  style.opacity = '0';
+  setTimeout(this.removeMark.bind(this), time);
+}), _defineProperty(_dragStore, _config.REMOVE_ANIMATION_TYPES.back, function () {
+  var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 300;
+
+  var style = this.draggedNode && this.draggedNode.style;
+  if (!style) return;
+  style.transition = 'all ' + time / 1000 + 's cubic-bezier(0.2,0.4,0.25,1.1)';
+  style.transform = 'translate(0,0)';
+  setTimeout(this.removeMark.bind(this), time);
+}), _defineProperty(_dragStore, 'removeMark', function removeMark() {
+  try {
+    document.body.removeChild(this.markNode);
+    this.draggedNode = null;
+  } catch (e) {
+    // console.log('出错', e)
+  }
+}), _dragStore);
 
 exports.default = dragStore;
 var methods = exports.methods = {
@@ -668,7 +670,7 @@ var Drop = function () {
     value: function onDragEnd(inTarget, data) {
       console.log('目标监听到拖动结束');
       this.emit('onDragEnd', inTarget, data);
-      _store.methods.hideDragedNode('fade');
+      _store.methods.hideDragedNode('blost');
     }
 
     /**
@@ -756,6 +758,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var DOCUMENT_ADDR = exports.DOCUMENT_ADDR = '';
+var REMOVE_ANIMATION_TYPES = exports.REMOVE_ANIMATION_TYPES = {
+  'fade': 'animation_fade',
+  'blost': 'animation_blost',
+  'back': 'animation_back'
+};
 
 /***/ }),
 /* 6 */

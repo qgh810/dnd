@@ -1,4 +1,6 @@
 import IMAGES from './icon-images'
+import { REMOVE_ANIMATION_TYPES } from './config'
+
 const dragStore = {
   /* ********** drag设置的变量 *************/
   data: null,
@@ -111,36 +113,34 @@ const dragStore = {
     } catch (e) {}
   },
 
-  hideDragedNode (type) {
-    switch (type) {
-      case 'blost':
-        this.blost()
-        break
-      case 'fade':
-        this.blost()
-        break
-      default:
-        this.removeMark()
-        break
-    }
+  hideDragedNode (type, time) {
+    if (!type) return this.removeMark()
+    REMOVE_ANIMATION_TYPES[type] && this[REMOVE_ANIMATION_TYPES[type]](time)
   },
 
-  fade () {
-    console.log(123123)
+  [REMOVE_ANIMATION_TYPES.fade] (time = 150) {
     let style = this.draggedNode && this.draggedNode.style
     if (!style) return
-    style.transition = 'all 0.15s ease'
+    style.transition = `all ${time / 1000}s ease`
     style.opacity = '0'
-    setTimeout(this.removeMark.bind(this), 150)
+    setTimeout(this.removeMark.bind(this), time)
   },
 
-  blost () {
+  [REMOVE_ANIMATION_TYPES.blost] (time = 150) {
     let style = this.draggedNode && this.draggedNode.style
     if (!style) return
-    style.transition = 'all 0.15s ease'
+    style.transition = `all ${time / 1000}s ease`
     style.boxShadow = '0 0 50px 30px rgba(0,0,0,0.3)'
     style.opacity = '0'
-    setTimeout(this.removeMark.bind(this), 150)
+    setTimeout(this.removeMark.bind(this), time)
+  },
+
+  [REMOVE_ANIMATION_TYPES.back] (time = 300) {
+    let style = this.draggedNode && this.draggedNode.style
+    if (!style) return
+    style.transition = `all ${time / 1000}s cubic-bezier(0.2,0.4,0.25,1.1)`
+    style.transform = 'translate(0,0)'
+    setTimeout(this.removeMark.bind(this), time)
   },
 
   // 移除蒙层

@@ -69,7 +69,7 @@ class Drop {
   onDragEnd (inTarget, data) {
     console.log('目标监听到拖动结束')
     this.emit('onDragEnd', inTarget, data)
-    methods.hideDragedNode('fade')
+    methods.hideDragedNode('blost')
   }
 
   /**
