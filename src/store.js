@@ -173,9 +173,10 @@ const dragStore = {
 
   /**
    * 显示状态icon
+   * url 可以是图片绝对路径 也可以是 add | reject | delete
    */
   showStateicon (url) {
-    url = IMAGES[url] || url || ''
+    url = IMAGES[url] || url || 'add'
     let iconStyle = this.stateIcon.style
     iconStyle.display = 'block'
     iconStyle.background = `no-repeat url(${url}) center center / 100% auto`

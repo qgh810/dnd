@@ -92,6 +92,7 @@ class Drag {
     this.el.onmouseup = null
     this.mark && (this.mark.onmousemove = null)
     this.mark && (this.mark.onmouseup = null)
+    methods.hideStateicon()
     document.removeEventListener('mouseup', this.onElMouseUp.bind(this))
   }
 
