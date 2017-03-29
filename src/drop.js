@@ -30,9 +30,6 @@ class Drop {
     if (typeof options.onDrop !== 'function') {
       return console.error(this.el, 'onDrop 必须是一个函数 请参考相关说明' + DOCUMENT_ADDR)
     }
-    if (!options.name) {
-      console.warn(this.el, '未给Drop定义name属性,不定义name将无法手动销毁当前Drop实例 请参考相关说明' + DOCUMENT_ADDR)
-    }
     let baseOptions = {
       name: null
     }
