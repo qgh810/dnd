@@ -467,7 +467,8 @@ var Drag = function () {
   }, {
     key: 'init',
     value: function init() {
-      this.addEventListener();
+      this.addEventListenerPC();
+      this.addEventListenerMB();
     }
 
     /**
@@ -475,21 +476,27 @@ var Drag = function () {
      */
 
   }, {
-    key: 'addEventListener',
-    value: function addEventListener() {
-      var _this = this;
-
+    key: 'addEventListenerPC',
+    value: function addEventListenerPC() {
       var dom = this.el;
       // 监听当前节点的鼠标点击事件
-      dom.addEventListener('mousedown', function (e) {
+      function onMouseDowm(e) {
         var pageX = e.pageX,
             pageY = e.pageY;
 
-        _this.mouseDownPosition = { left: pageX, top: pageY };
-        dom.onmousemove = _this.onElMousemove.bind(_this);
-        dom.onmouseup = _this.onElMouseUp.bind(_this);
-        document.addEventListener('mouseup', _this.onElMouseUp.bind(_this));
-      });
+        this.mouseDownPosition = { left: pageX, top: pageY };
+        dom.onmousemove = this.onElMousemove.bind(this);
+        dom.onmouseup = this.onElMouseUp.bind(this);
+        document.addEventListener('mouseup', this.onElMouseUp.bind(this));
+      }
+      dom.addEventListener('mousedown', onMouseDowm.bind(this));
+    }
+  }, {
+    key: 'addEventListenerMB',
+    value: function addEventListenerMB() {
+      // 兼容移动端
+      this.el.addEventListener('touchmove', this.onElTouchMove.bind(this));
+      this.el.addEventListener('touchend', this.onElTouchEnd.bind(this));
     }
 
     /**
@@ -555,8 +562,10 @@ var Drag = function () {
     key: 'onMarkMouseMove',
     value: function onMarkMouseMove(e) {
       if (!_store2.default.draggedNode) return;
-      var pageX = e.pageX,
-          pageY = e.pageY;
+
+      var _ref = e.touches && e.touches[0] || e,
+          pageX = _ref.pageX,
+          pageY = _ref.pageY;
 
       var translateX = pageX - this.mouseDownPosition.left;
       var translateY = pageY - this.mouseDownPosition.top;
@@ -575,6 +584,7 @@ var Drag = function () {
       this.mouseDragging = false;
       this.mark.onmousemove = null;
       this.el.onmousemove = null;
+      this.mouseDownPosition = { left: -1, top: -1 };
 
       this.emit('onDragEnd', {
         el: this.el,
@@ -582,6 +592,25 @@ var Drag = function () {
         target: _store2.default.targets[_store2.default.targetIndex]
       });
       _store2.default.onDragEnd();
+    }
+  }, {
+    key: 'onElTouchMove',
+    value: function onElTouchMove(e) {
+      if (this.mouseDownPosition.left === -1) {
+        var _e$touches$ = e.touches[0],
+            pageX = _e$touches$.pageX,
+            pageY = _e$touches$.pageY;
+
+        this.mouseDownPosition.left = pageX;
+        this.mouseDownPosition.top = pageY;
+      }
+      this.onElMousemove();
+      this.onMarkMouseMove(e);
+    }
+  }, {
+    key: 'onElTouchEnd',
+    value: function onElTouchEnd(e) {
+      this.onMarkMouseUp();
     }
 
     /**

@@ -29,22 +29,30 @@ class Drag {
 
   // 初始化
   init () {
-    this.addEventListener()
+    this.addEventListenerPC()
+    this.addEventListenerMB()
   }
 
   /**
    * 事件监听
    */
-  addEventListener () {
+  addEventListenerPC () {
     let dom = this.el
     // 监听当前节点的鼠标点击事件
-    dom.addEventListener('mousedown', (e) => {
+    function onMouseDowm (e) {
       let {pageX, pageY} = e
       this.mouseDownPosition = {left: pageX, top: pageY}
       dom.onmousemove = this.onElMousemove.bind(this)
       dom.onmouseup = this.onElMouseUp.bind(this)
       document.addEventListener('mouseup', this.onElMouseUp.bind(this))
-    })
+    }
+    dom.addEventListener('mousedown', onMouseDowm.bind(this))
+  }
+
+  addEventListenerMB () {
+    // 兼容移动端
+    this.el.addEventListener('touchmove', this.onElTouchMove.bind(this))
+    this.el.addEventListener('touchend', this.onElTouchEnd.bind(this))
   }
 
   /**
@@ -101,7 +109,7 @@ class Drag {
    */
   onMarkMouseMove (e) {
     if (!store.draggedNode) return
-    let {pageX, pageY} = e
+    let {pageX, pageY} = e.touches && e.touches[0] || e
     let translateX = pageX - this.mouseDownPosition.left
     let translateY = pageY - this.mouseDownPosition.top
     store.draggedNode.style.transform = `translate(${translateX}px,${translateY}px)`
@@ -116,6 +124,7 @@ class Drag {
     this.mouseDragging = false
     this.mark.onmousemove = null
     this.el.onmousemove = null
+    this.mouseDownPosition = {left: -1, top: -1}
 
     this.emit('onDragEnd', {
       el: this.el,
@@ -123,6 +132,21 @@ class Drag {
       target: store.targets[store.targetIndex]
     })
     store.onDragEnd()
+  }
+
+
+  onElTouchMove (e) {
+    if (this.mouseDownPosition.left === -1) {
+      let {pageX, pageY} = e.touches[0]
+      this.mouseDownPosition.left = pageX
+      this.mouseDownPosition.top = pageY
+    }
+    this.onElMousemove()
+    this.onMarkMouseMove(e)
+  }
+
+  onElTouchEnd (e) {
+    this.onMarkMouseUp()
   }
 
   /**
