@@ -101,6 +101,7 @@ class Drag {
     this.mark && (this.mark.onmousemove = null)
     this.mark && (this.mark.onmouseup = null)
     methods.hideStateicon()
+    methods.removeDragedNode()
     document.removeEventListener('mouseup', this.onElMouseUp.bind(this))
   }
 
@@ -129,7 +130,8 @@ class Drag {
     this.emit('onDragEnd', {
       el: this.el,
       data: this.data,
-      target: store.targets[store.targetIndex]
+      target: store.targets[store.targetIndex],
+      methods,
     })
     store.onDragEnd()
   }
@@ -195,6 +197,7 @@ class Drag {
     style.top = top + 'px'
     style.transform = 'translate(0,0)'
     style.zIndex = 1000
+    style.margin = 0
   }
 
   /**

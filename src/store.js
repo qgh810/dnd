@@ -236,7 +236,7 @@ const dragStore = {
    * 动画 返回
    * @type {[time]} 动画时间 单位毫秒
    */
-  [REMOVE_ANIMATION_TYPES.back] (time = 300) {
+  [REMOVE_ANIMATION_TYPES.back] (time = 400) {
     let style = this.draggedNode && this.draggedNode.style
     if (!style) return
     style.transition = `all ${time / 1000}s cubic-bezier(0.2,0.4,0.25,1.1)`

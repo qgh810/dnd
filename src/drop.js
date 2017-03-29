@@ -77,7 +77,6 @@ class Drop {
    */
   onDragEnd (params) {
     this.emit('onDragEnd', params)
-    params.methods.removeDragedNode()
   }
 
   /**
