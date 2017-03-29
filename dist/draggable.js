@@ -290,11 +290,15 @@ var dragStore = (_dragStore = {
    * url 可以是图片绝对路径 也可以是 add | reject | delete
    */
   showStateicon: function showStateicon(url) {
-    if (this.isMobile) return console.warn('showStateicon仅在pc端口可用 请参考相关说明' + _config.DOCUMENT_ADDR);
-    url = _iconImages2.default[url] || url || 'add';
-    var iconStyle = this.stateIcon.style;
-    iconStyle.display = 'block';
-    iconStyle.background = 'no-repeat url(' + url + ') center center / 100% auto';
+    var _this3 = this;
+
+    setTimeout(function () {
+      if (_this3.isMobile) return console.warn('showStateicon仅在pc端口可用 请参考相关说明' + _config.DOCUMENT_ADDR);
+      url = _iconImages2.default[url] || url || 'add';
+      var iconStyle = _this3.stateIcon.style;
+      iconStyle.display = 'block';
+      iconStyle.background = 'no-repeat url(' + url + ') center center / 100% auto';
+    }, 0);
   },
 
 
@@ -314,12 +318,12 @@ var dragStore = (_dragStore = {
    * time 动画持续时长 非必填
    */
   removeDragedNode: function removeDragedNode(type, time) {
-    var _this3 = this;
+    var _this4 = this;
 
     if (!type) return this.removeMark();
     if (!_config.REMOVE_ANIMATION_TYPES[type]) return this.removeMark();
     setTimeout(function () {
-      clearTimeout(_this3.removeMarkTid);
+      clearTimeout(_this4.removeMarkTid);
     }, 0);
     this[_config.REMOVE_ANIMATION_TYPES[type]](time);
   }
@@ -341,7 +345,7 @@ var dragStore = (_dragStore = {
   style.opacity = '0';
   setTimeout(this.removeMark.bind(this), time);
 }), _defineProperty(_dragStore, _config.REMOVE_ANIMATION_TYPES.back, function () {
-  var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 300;
+  var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 400;
 
   var style = this.draggedNode && this.draggedNode.style;
   if (!style) return;
@@ -349,23 +353,23 @@ var dragStore = (_dragStore = {
   style.transform = 'translate(0,0)';
   setTimeout(this.removeMark.bind(this), time);
 }), _defineProperty(_dragStore, 'removeMark', function removeMark() {
-  var _this4 = this;
+  var _this5 = this;
 
   clearTimeout(this.removeMarkTid);
   this.removeMarkTid = setTimeout(function () {
     try {
-      document.body.removeChild(_this4.markNode);
-      _this4.draggedNode = null;
+      document.body.removeChild(_this5.markNode);
+      _this5.draggedNode = null;
     } catch (e) {
       // console.log('出错', e)
     }
   }, 10);
 }), _defineProperty(_dragStore, 'destroyDrop', function destroyDrop(name) {
-  var _this5 = this;
+  var _this6 = this;
 
   this.targets.forEach(function (item, i) {
     if (item.name === name) {
-      _this5.removeDrop(i);
+      _this6.removeDrop(i);
     }
   });
 }), _defineProperty(_dragStore, 'removeDrop', function removeDrop(index) {
@@ -569,6 +573,7 @@ var Drag = function () {
       this.mark && (this.mark.onmousemove = null);
       this.mark && (this.mark.onmouseup = null);
       _store.methods.hideStateicon();
+      _store.methods.removeDragedNode();
       document.removeEventListener('mouseup', this.onElMouseUp.bind(this));
     }
 
@@ -607,7 +612,8 @@ var Drag = function () {
       this.emit('onDragEnd', {
         el: this.el,
         data: this.data,
-        target: _store2.default.targets[_store2.default.targetIndex]
+        target: _store2.default.targets[_store2.default.targetIndex],
+        methods: _store.methods
       });
       _store2.default.onDragEnd();
     }
@@ -689,6 +695,7 @@ var Drag = function () {
       style.top = top + 'px';
       style.transform = 'translate(0,0)';
       style.zIndex = 1000;
+      style.margin = 0;
     }
 
     /**
@@ -845,7 +852,6 @@ var Drop = function () {
     key: 'onDragEnd',
     value: function onDragEnd(params) {
       this.emit('onDragEnd', params);
-      params.methods.removeDragedNode();
     }
 
     /**

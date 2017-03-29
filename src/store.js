@@ -177,11 +177,13 @@ const dragStore = {
    * url 可以是图片绝对路径 也可以是 add | reject | delete
    */
   showStateicon (url) {
-    if (this.isMobile) return console.warn('showStateicon仅在pc端口可用 请参考相关说明' + DOCUMENT_ADDR)
-    url = IMAGES[url] || url || 'add'
-    let iconStyle = this.stateIcon.style
-    iconStyle.display = 'block'
-    iconStyle.background = `no-repeat url(${url}) center center / 100% auto`
+    setTimeout(() => {
+      if (this.isMobile) return console.warn('showStateicon仅在pc端口可用 请参考相关说明' + DOCUMENT_ADDR)
+      url = IMAGES[url] || url || 'add'
+      let iconStyle = this.stateIcon.style
+      iconStyle.display = 'block'
+      iconStyle.background = `no-repeat url(${url}) center center / 100% auto`
+    }, 0)
   },
 
   /**

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>html</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <script type="text/javascript" src="dist/draggable.js"></script>
+    <script type="text/javascript" src="../dist/draggable.js"></script>
 
     <style>
       html, body {
@@ -18,35 +18,91 @@
       .app-root {
         width: 100%;
         height: 100%;
+        padding: 20px;
+        box-sizing: border-box;
         background: #fff;
       }
 
-      .draggable-box {
-        width: 50px;
-        height: 50px;
-        border: 1px solid #000;
-        border-radius: 50px;
-        overflow: hidden;
-        display: inline-block;
-      }
-      .drag-content {
-        background: orange;
-        line-height: 50px;
-        text-align: center;
+      .lists {
+
       }
 
+      .draggable-node {
+        position: relative;
+        display: inline-block;
+        margin: 10px;
+        padding: 5px 10px;
+        height: 30px;
+        box-sizing: border-box;
+        background: orange;
+      }
+
+      .draggable-node:after {
+        content: '';
+        position: absolute;
+        left: 100%;
+        top: 0;
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 15px solid transparent;
+        border-left: 5px solid orange;
+        border-bottom: 15px solid transparent;
+      }
+
+      .boxs {
+        margin: 20px auto;
+      }
       .droppable-box {
+        position: relative;
+        float: left;
+        margin-right: 10px;
         width: 200px;
         height: 200px;
-        border: 1px solid #000;
-        margin: 100px;
+        border: 1px solid #999;
+      }
+      .placeholder {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        line-height: 200px;
+        text-align: center;
+        color: #ccc;
       }
     </style>
   </head>
   <body>
     <div class="app-root">
-      <div class="lists">
+      <div class="draggable-node drag1">
+        <span class="label">标签1</span>
+      </div>
+      <div class="draggable-node drag2">
+        <span class="label">标签2</span>
+      </div>
+      <div class="draggable-node drag3">
+        <span class="label">标签3</span>
+      </div>
 
+      <div class="boxs">
+        <div class="droppable-box drop1">
+          <div class="placeholder">
+            <span>区域1</span>
+            不接受标签1
+          </div>
+        </div>
+        <div class="droppable-box drop2">
+          <div class="placeholder">
+            <span>区域2</span>
+            不接受标签2
+          </div>
+        </div>
+        <div class="droppable-box drop3">
+          <div class="placeholder">
+            <span>删除区</span>
+          </div>
+        </div>
       </div>
 
       <!-- <div class="draggable-box drag2">
@@ -67,42 +123,151 @@
   </body>
   <script>
     window.onload = function () {
-      // 初始化被拖动元素
-      new Drag('.drag1')
+      var rootNode = document.getElementsByClassName('app-root')[0]
 
-      new Drag('.drag2', {
-        // data: 99, // 要传递的数据
-        // onDragStart: function () {
-        //   console.log('html 被拖元素监听到拖动开始')
-        // },
-        // onDragEnd: function (params) {
-        //   console.log('监听到拖动结束')
-        //   console.log('放下后被拖元素是否返回?', params.isBack)
-        //   console.log('当前被拖动的数据: ', params.data)
-        //   console.log('放下的位置是否在目标内: ', params.inTarget)
-        //   console.warn('加多一个目标实例')
-        //   data的默认值是那个当前dom
-        // }
-      })
+      var draggableNodes = document.getElementsByClassName('draggable-node')
+      for (var i = 0; i < draggableNodes.length; i++) {
+        new Drag(draggableNodes[i], {
+          data: i + 1,
+          onDragEnd: function (params) {
+            !params.target && params.methods.removeDragedNode('back')
+          }
+        })
+      }
 
       new Drop('.drop1', {
-        name: '111',
+        onDragStart: function (params) {
+          if (params.data === 1) {
+            params.el.style.background = 'rgba(255, 0, 0, 0.1)'
+          } else {
+            params.el.style.background = 'rgba(0, 0, 255, 0.1)'
+          }
+        },
         onDragEnter: function (params) {
-          console.log(params)
-          params.methods.showStateicon('delete')
+          if (params.data === 1) {
+            params.methods.showStateicon('reject')
+            params.el.style.background = 'rgba(255, 0, 0, 0.2)'
+          } else {
+            params.methods.showStateicon('add')
+            params.el.style.background = 'rgba(0, 0, 255, 0.2)'
+          }
+        },
+        onDragLeave: function (params) {
+          params.methods.hideStateicon()
+          if (params.data === 1) {
+            params.el.style.background = 'rgba(255, 0, 0, 0.1)'
+          } else {
+            params.el.style.background = 'rgba(0, 0, 255, 0.1)'
+          }
+        },
+        onDragEnd: function (params) {
+          params.el.style.background = '#fff'
         },
         onDrop: function (params) {
-          console.log('监听到有东西放下')
-          params.methods.removeDragedNode('blost')
+          if (params.data === 1) {
+            params.methods.removeDragedNode('back')
+          } else {
+            params.methods.removeDragedNode('fade')
+            params.el.appendChild(params.sourceNode.cloneNode(true))
+          }
         }
       })
 
       new Drop('.drop2', {
-        name: '222',
+        onDragStart: function (params) {
+          if (params.data === 2) {
+            params.el.style.background = 'rgba(255, 0, 0, 0.1)'
+          } else {
+            params.el.style.background = 'rgba(0, 0, 255, 0.1)'
+          }
+        },
+        onDragEnter: function (params) {
+          if (params.data === 2) {
+            params.methods.showStateicon('reject')
+            params.el.style.background = 'rgba(255, 0, 0, 0.2)'
+          } else {
+            params.methods.showStateicon('add')
+            params.el.style.background = 'rgba(0, 0, 255, 0.2)'
+          }
+        },
+        onDragLeave: function (params) {
+          params.methods.hideStateicon()
+          if (params.data === 2) {
+            params.el.style.background = 'rgba(255, 0, 0, 0.1)'
+          } else {
+            params.el.style.background = 'rgba(0, 0, 255, 0.1)'
+          }
+        },
+        onDragEnd: function (params) {
+          params.el.style.background = '#fff'
+        },
         onDrop: function (params) {
-          console.log('监听到有东西放下')
+          if (params.data === 2) {
+            params.methods.removeDragedNode('back')
+          } else {
+            params.methods.removeDragedNode('fade')
+            params.el.appendChild(params.sourceNode.cloneNode(true))
+          }
         }
       })
+
+
+      new Drop('.drop3', {
+        onDragStart: function (params) {
+          params.el.style.background = 'rgba(0, 0, 255, 0.1)'
+        },
+        onDragEnter: function (params) {
+          params.methods.showStateicon('delete')
+          params.el.style.background = 'rgba(255, 0, 0, 0.3)'
+        },
+        onDragLeave: function (params) {
+          params.methods.hideStateicon()
+          params.el.style.background = 'rgba(0, 0, 255, 0.1)'
+        },
+        onDragEnd: function (params) {
+          params.el.style.background = '#fff'
+        },
+        onDrop: function (params) {
+          params.methods.removeDragedNode('blost')
+          rootNode.removeChild(params.sourceNode)
+        }
+      })
+      // 初始化被拖动元素
+      // new Drag('.drag1')
+      //
+      // new Drag('.drag2', {
+      //   // data: 99, // 要传递的数据
+      //   // onDragStart: function () {
+      //   //   console.log('html 被拖元素监听到拖动开始')
+      //   // },
+      //   // onDragEnd: function (params) {
+      //   //   console.log('监听到拖动结束')
+      //   //   console.log('放下后被拖元素是否返回?', params.isBack)
+      //   //   console.log('当前被拖动的数据: ', params.data)
+      //   //   console.log('放下的位置是否在目标内: ', params.inTarget)
+      //   //   console.warn('加多一个目标实例')
+      //   //   data的默认值是那个当前dom
+      //   // }
+      // })
+
+      // new Drop('.drop1', {
+      //   name: '111',
+      //   onDragEnter: function (params) {
+      //     console.log(params)
+      //     params.methods.showStateicon('delete')
+      //   },
+      //   onDrop: function (params) {
+      //     console.log('监听到有东西放下')
+      //     params.methods.removeDragedNode('blost')
+      //   }
+      // })
+      //
+      // new Drop('.drop2', {
+      //   name: '222',
+      //   onDrop: function (params) {
+      //     console.log('监听到有东西放下')
+      //   }
+      // })
     }
   </script>
 </html>
