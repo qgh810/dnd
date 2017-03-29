@@ -5,11 +5,13 @@ const dragStore = {
   /* ********** drag设置的变量 *************/
   data: null,
   draggedNode: null,
+  sourceNode: null,
   markNode: null,
   stateIcon: null,
   mousePosition: null,
 
   /* ********** drop设置的变量 *************/
+  targets: [],
   targetOnDragStarts: [],
   targetOnDragEnds: [],
   onDragEnters: [],
@@ -23,16 +25,25 @@ const dragStore = {
   _prevValidIndex: -1,
   _inTarget: false,
 
-  onDragStart (data) {
+  onDragStart (data, el) {
     this._initStore()
+    this.sourceNode = el
     this.data = data
     // 广播拖动开始
-    this.targetOnDragStarts.forEach((fn, index) => fn && fn(data))
+    this.targetOnDragStarts.forEach((fn, index) => fn && fn({
+      data,
+      enter: index === this.targetIndex,
+      el: this.targets[index].el,
+      sourceNode: this.sourceNode,
+      name: this.targets[index].name,
+      methods
+    }))
   },
 
   _initStore () {
     this._inTarget = false
     this._prevValidIndex = -1
+    this.targetIndex = -1
     this.hideStateicon()
   },
 
@@ -45,28 +56,70 @@ const dragStore = {
       if (!this._inTarget) {
         this._prevValidIndex = this.targetIndex
         this._inTarget = true
-        this.onDragEnters[this.targetIndex](this.data)
+
+        let params = {
+          enter: true,
+          data: this.data,
+          el: this.targets[this.targetIndex].el,
+          sourceNode: this.sourceNode,
+          name: this.targets[this.targetIndex].name,
+          methods,
+        }
+        this.onDragEnters[this.targetIndex](params)
       }
       // 调用回调
-      this.onDragMoves[this.targetIndex](this.data)
+      let params = {
+        enter: true,
+        data: this.data,
+        el: this.targets[this.targetIndex].el,
+        sourceNode: this.sourceNode,
+        name: this.targets[this.targetIndex].name,
+        pageX,
+        pageY,
+        methods,
+      }
+      this.onDragMoves[this.targetIndex](params)
     } else {
       // 判断是否在目标内  是的话表示刚刚离开
       if (this._inTarget) {
         this._inTarget = false
-        this.onDragLeaves[this._prevValidIndex]()
+        let params = {
+          enter: false,
+          data: this.data,
+          el: this.targets[this._prevValidIndex].el,
+          sourceNode: this.sourceNode,
+          name: this.targets[this._prevValidIndex].name,
+          methods,
+        }
+        this.onDragLeaves[this._prevValidIndex](params)
       }
     }
   },
 
   onDragEnd () {
     // 触发放置事件
-    this.targetIndex >= 0 && this.onDrops[this.targetIndex]({data: this.data})
+    if (this.targetIndex >= 0) {
+      let params = {
+        enter: true,
+        data: this.data,
+        el: this.targets[this.targetIndex].el,
+        sourceNode: this.sourceNode,
+        name: this.targets[this.targetIndex].name,
+        methods,
+      }
+      this.targetIndex >= 0 && this.onDrops[this.targetIndex](params)
+    }
+
     // 广播拖动结束事件
     this.targetOnDragEnds.forEach((fn, index) => {
       if (!fn) return
       let params = {
-        success: index === this.targetIndex,
+        enter: index === this.targetIndex,
         data: this.data,
+        el: this.targets[index].el,
+        sourceNode: this.sourceNode,
+        name: this.targets[index].name,
+        methods,
       }
       fn(params)
     })
@@ -113,9 +166,13 @@ const dragStore = {
     } catch (e) {}
   },
 
-  hideDragedNode (type, time) {
+  removeDragedNode (type, time) {
     if (!type) return this.removeMark()
-    REMOVE_ANIMATION_TYPES[type] && this[REMOVE_ANIMATION_TYPES[type]](time)
+    if (!REMOVE_ANIMATION_TYPES[type]) return this.removeMark()
+    setTimeout(() => {
+      clearTimeout(this.removeMarkTid)
+    }, 0)
+    this[REMOVE_ANIMATION_TYPES[type]](time)
   },
 
   [REMOVE_ANIMATION_TYPES.fade] (time = 150) {
@@ -127,6 +184,7 @@ const dragStore = {
   },
 
   [REMOVE_ANIMATION_TYPES.blost] (time = 150) {
+    console.log('yeah')
     let style = this.draggedNode && this.draggedNode.style
     if (!style) return
     style.transition = `all ${time / 1000}s ease`
@@ -145,12 +203,39 @@ const dragStore = {
 
   // 移除蒙层
   removeMark () {
-    try {
-      document.body.removeChild(this.markNode)
-      this.draggedNode = null
-    } catch (e) {
-      // console.log('出错', e)
-    }
+    clearTimeout(this.removeMarkTid)
+    this.removeMarkTid = setTimeout(() => {
+      console.log('removeMark')
+      try {
+        document.body.removeChild(this.markNode)
+        this.draggedNode = null
+      } catch (e) {
+        // console.log('出错', e)
+      }
+    }, 10)
+  },
+
+  destroyDrop (name) {
+    this.targets.forEach((item, i) => {
+      if (item.name === name) {
+        this.removeDrop(i)
+      }
+    })
+  },
+
+  removeDrop (index) {
+    delete this.targets[index]
+    delete this.targetOnDragStarts[index]
+    delete this.targetOnDragEnds[index]
+    delete this.onDragEnters[index]
+    delete this.onDragLeaves[index]
+    delete this.onDragMoves[index]
+    delete this.onDrops[index]
+    delete this.targetPositions[index]
+  },
+
+  getStateIconNode () {
+    return this.stateIcon
   }
 }
 
@@ -159,5 +244,7 @@ export default dragStore
 export const methods = {
   showStateicon: dragStore.showStateicon.bind(dragStore),
   hideStateicon: dragStore.hideStateicon.bind(dragStore),
-  hideDragedNode: dragStore.hideDragedNode.bind(dragStore),
+  getStateIconNode: dragStore.getStateIconNode.bind(dragStore),
+  removeDragedNode: dragStore.removeDragedNode.bind(dragStore),
+  destroyDrop: dragStore.destroyDrop.bind(dragStore),
 }

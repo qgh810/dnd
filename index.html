@@ -63,7 +63,7 @@
     window.onload = function () {
       // 初始化被拖动元素
       new Drag('.drag1', {
-        // data: 101, // 要传递的数据
+        data: 101, // 要传递的数据
         // onDragStart: function () {
         //   console.log('html 被拖元素监听到拖动开始')
         // },
@@ -95,17 +95,15 @@
       new Drop('.drop1', {
         name: '111',
 
-        onDrop: function () {
+        onDrop: function (params) {
           console.log('监听到有东西放下')
-          Drop.back()
-          Drop.showDeleteIcon()
-          let IconEl = Drop.getIconNode()
+          params.methods.removeDragedNode('blost')
         }
       })
 
       new Drop('.drop2', {
         name: '222',
-        onDrop: function () {
+        onDrop: function (params) {
           console.log('监听到有东西放下')
         }
       })
