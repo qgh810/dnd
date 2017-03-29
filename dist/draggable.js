@@ -106,7 +106,7 @@ var dragStore = (_dragStore = {
   targetOnDragEnds: [],
   onDragEnters: [],
   onDragLeaves: [],
-  onDragMoves: [],
+  onDragOvers: [],
   onDrops: [],
   targetPositions: [],
 
@@ -152,7 +152,7 @@ var dragStore = (_dragStore = {
   /**
    * 监听拖动
    */
-  onDragMove: function onDragMove(pageX, pageY) {
+  onDragOver: function onDragOver(pageX, pageY) {
     this.mousePosition = [pageX, pageY];
     this.targetIndex = this.collision(pageX, pageY);
     this.setIconPosition(pageX, pageY);
@@ -183,7 +183,7 @@ var dragStore = (_dragStore = {
         pageY: pageY,
         methods: methods
       };
-      this.onDragMoves[this.targetIndex](params);
+      this.onDragOvers[this.targetIndex](params);
     } else {
       // 判断是否在目标内  是的话表示刚刚离开
       if (this._inTarget) {
@@ -355,7 +355,7 @@ var dragStore = (_dragStore = {
   delete this.targetOnDragEnds[index];
   delete this.onDragEnters[index];
   delete this.onDragLeaves[index];
-  delete this.onDragMoves[index];
+  delete this.onDragOvers[index];
   delete this.onDrops[index];
   delete this.targetPositions[index];
 }), _defineProperty(_dragStore, 'getStateIconNode', function getStateIconNode() {
@@ -561,7 +561,7 @@ var Drag = function () {
       var translateX = pageX - this.mouseDownPosition.left;
       var translateY = pageY - this.mouseDownPosition.top;
       _store2.default.draggedNode.style.transform = 'translate(' + translateX + 'px,' + translateY + 'px)';
-      _store2.default.onDragMove(pageX, pageY);
+      _store2.default.onDragOver(pageX, pageY);
     }
 
     /**
@@ -776,7 +776,7 @@ var Drop = function () {
       _store2.default.targetOnDragStarts[index] = this.onDragStart.bind(this);
       _store2.default.targetOnDragEnds[index] = this.onDragEnd.bind(this);
       _store2.default.onDragEnters[index] = this.onDragEnter.bind(this);
-      _store2.default.onDragMoves[index] = this.onDragMove.bind(this);
+      _store2.default.onDragOvers[index] = this.onDragOver.bind(this);
       _store2.default.onDragLeaves[index] = this.onDragLeave.bind(this);
       _store2.default.onDrops[index] = this.onDrop.bind(this);
     }
@@ -818,9 +818,9 @@ var Drop = function () {
      */
 
   }, {
-    key: 'onDragMove',
-    value: function onDragMove(params) {
-      this.emit('onDragMove', params);
+    key: 'onDragOver',
+    value: function onDragOver(params) {
+      this.emit('onDragOver', params);
     }
 
     /**

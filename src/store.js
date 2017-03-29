@@ -17,7 +17,7 @@ const dragStore = {
   targetOnDragEnds: [],
   onDragEnters: [],
   onDragLeaves: [],
-  onDragMoves: [],
+  onDragOvers: [],
   onDrops: [],
   targetPositions: [],
 
@@ -57,7 +57,7 @@ const dragStore = {
   /**
    * 监听拖动
    */
-  onDragMove (pageX, pageY) {
+  onDragOver (pageX, pageY) {
     this.mousePosition = [pageX, pageY]
     this.targetIndex = this.collision(pageX, pageY)
     this.setIconPosition(pageX, pageY)
@@ -88,7 +88,7 @@ const dragStore = {
         pageY,
         methods,
       }
-      this.onDragMoves[this.targetIndex](params)
+      this.onDragOvers[this.targetIndex](params)
     } else {
       // 判断是否在目标内  是的话表示刚刚离开
       if (this._inTarget) {
@@ -278,7 +278,7 @@ const dragStore = {
     delete this.targetOnDragEnds[index]
     delete this.onDragEnters[index]
     delete this.onDragLeaves[index]
-    delete this.onDragMoves[index]
+    delete this.onDragOvers[index]
     delete this.onDrops[index]
     delete this.targetPositions[index]
   },

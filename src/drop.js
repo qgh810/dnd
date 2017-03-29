@@ -62,7 +62,7 @@ class Drop {
     store.targetOnDragStarts[index] = this.onDragStart.bind(this)
     store.targetOnDragEnds[index] = this.onDragEnd.bind(this)
     store.onDragEnters[index] = this.onDragEnter.bind(this)
-    store.onDragMoves[index] = this.onDragMove.bind(this)
+    store.onDragOvers[index] = this.onDragOver.bind(this)
     store.onDragLeaves[index] = this.onDragLeave.bind(this)
     store.onDrops[index] = this.onDrop.bind(this)
   }
@@ -93,8 +93,8 @@ class Drop {
   /**
    * 目标监听在自己上方拖动
    */
-  onDragMove (params) {
-    this.emit('onDragMove', params)
+  onDragOver (params) {
+    this.emit('onDragOver', params)
   }
 
   /**

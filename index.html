@@ -44,18 +44,20 @@
   </head>
   <body>
     <div class="app-root">
-      <div class="draggable-box drag1">
-        <div class="drag-content">
-          拖动我
-        </div>
-      </div>
+
       <div class="draggable-box drag2">
         <div class="drag-content">
           也可以拖动我
         </div>
       </div>
 
-      <div class="droppable-box drop1"></div>
+      <div class="droppable-box drop1">
+        <div class="draggable-box drag1">
+          <div class="drag-content">
+            拖动我
+          </div>
+        </div>
+      </div>
       <div class="droppable-box drop2"></div>
     </div>
   </body>
@@ -81,7 +83,9 @@
 
       new Drop('.drop1', {
         name: '111',
-
+        onDragEnter: function (params) {
+          console.log(params)
+        },
         onDrop: function (params) {
           console.log('监听到有东西放下')
           params.methods.removeDragedNode('blost')

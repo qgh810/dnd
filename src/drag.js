@@ -105,7 +105,7 @@ class Drag {
     let translateX = pageX - this.mouseDownPosition.left
     let translateY = pageY - this.mouseDownPosition.top
     store.draggedNode.style.transform = `translate(${translateX}px,${translateY}px)`
-    store.onDragMove(pageX, pageY)
+    store.onDragOver(pageX, pageY)
   }
 
   /**
