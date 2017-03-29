@@ -2,7 +2,7 @@ import { checkNode } from './utils/check'
 import { getBoundingClientRect } from './utils/dom'
 import { DOCUMENT_ADDR } from './config'
 import store from './store'
-
+import { methods } from './store'
 class Drop {
   constructor (el, options) {
     this.initData(el, options) && this.init()
@@ -47,14 +47,13 @@ class Drop {
   }
 
   setStore () {
-    let index = store.conditions.push(this.options.condition) - 1
+    let index = store.targetOnDragStarts.push(this.onDragStart.bind(this)) - 1
     this.index = index
-    store.targetOnDragStarts[index] = this.onDragStart.bind(this)
     store.targetOnDragEnds[index] = this.onDragEnd.bind(this)
     store.onDragEnters[index] = this.onDragEnter.bind(this)
+    store.onDragMoves[index] = this.onDragMove.bind(this)
     store.onDragLeaves[index] = this.onDragLeave.bind(this)
     store.onDrops[index] = this.onDrop.bind(this)
-    store.iconClasss[index] = {accept: this.acceptIconClass, notAccept: this.notAcceptIconClass}
   }
 
   // 目标监听到拖动开始
@@ -70,6 +69,7 @@ class Drop {
   onDragEnd (inTarget, data) {
     console.log('目标监听到拖动结束')
     this.emit('onDragEnd', inTarget, data)
+    methods.hideDragedNode('fade')
   }
 
   /**
@@ -77,13 +77,20 @@ class Drop {
    */
   onDragEnter (accept, data) {
     console.log('目标监听到拖动进入当前范围')
+    methods.showStateicon('add')
     this._active = true
     this._accept = accept
     this.emit('onDragEnter', accept, data)
   }
 
+  onDragMove () {
+    console.log('目标监听到正在自己上面拖动')
+  }
+
   // 目标监听到离开当前范围
   onDragLeave () {
+    methods.hideStateicon()
+
     console.log('目标监听到离开当前范围')
     this._active = false
     this._accept = false

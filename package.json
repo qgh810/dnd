@@ -2,7 +2,7 @@
   "name": "draggable.js",
   "version": "1.0.0",
   "description": "drag and drop",
-  "main": "index.js",
+  "main": "dist/draggable.js",
   "scripts": {
     "dev": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
