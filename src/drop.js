@@ -1,5 +1,4 @@
 import { checkNode } from './utils/check'
-import { getBoundingClientRect } from './utils/dom'
 import { DOCUMENT_ADDR } from './config'
 import store from './store'
 
@@ -116,7 +115,7 @@ class Drop {
    * 托管当前位置信息
    */
   setStorePositions () {
-    let {left, top, width, height} = getBoundingClientRect(this.el)
+    let {left, top, width, height} = this.el.getBoundingClientRect()
     store.targetPositions[this.index] = {
       top: top,
       bottom: top + height,

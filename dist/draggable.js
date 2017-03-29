@@ -315,7 +315,6 @@ var dragStore = (_dragStore = {
 }), _defineProperty(_dragStore, _config.REMOVE_ANIMATION_TYPES.blost, function () {
   var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 150;
 
-  console.log('yeah');
   var style = this.draggedNode && this.draggedNode.style;
   if (!style) return;
   style.transition = 'all ' + time / 1000 + 's ease';
@@ -335,7 +334,6 @@ var dragStore = (_dragStore = {
 
   clearTimeout(this.removeMarkTid);
   this.removeMarkTid = setTimeout(function () {
-    console.log('removeMark');
     try {
       document.body.removeChild(_this4.markNode);
       _this4.draggedNode = null;
@@ -412,43 +410,7 @@ function checkNode(el) {
 }
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-// 获取当前dom相对document位置
-var getPosition = exports.getPosition = function getPosition(node) {
-  var left = node.offsetLeft;
-  var top = node.offsetTop;
-  var parent = node.offsetParent;
-  while (parent) {
-    left += parent.offsetLeft;
-    top += parent.offsetTop;
-    parent = parent.offsetParent;
-  }
-  return { left: left, top: top };
-};
-
-// 获取当前dom相对视口位置和大小
-var getBoundingClientRect = exports.getBoundingClientRect = function getBoundingClientRect(node) {
-  return node.getBoundingClientRect();
-};
-
-// 获取当前dom大小
-var getSize = exports.getSize = function getSize(node) {
-  var result = {
-    width: node.offsetWidth,
-    height: node.offsetHeight
-  };
-  return result;
-};
-
-/***/ }),
+/* 2 */,
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -458,8 +420,6 @@ var getSize = exports.getSize = function getSize(node) {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _check = __webpack_require__(1);
-
-var _dom = __webpack_require__(2);
 
 var _store = __webpack_require__(0);
 
@@ -492,7 +452,8 @@ var Drag = function () {
       this.el.style.userSelect = 'none';
       this.el.style.cursor = 'default';
 
-      this.options = this.checkOptions(options);
+      options = this.checkOptions(options);
+      this.options = options;
       this.data = options.data;
       this.mouseDownPosition = { left: -1, top: -1 };
       this.mouseDragging = false;
@@ -728,8 +689,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _check = __webpack_require__(1);
 
-var _dom = __webpack_require__(2);
-
 var _config = __webpack_require__(5);
 
 var _store = __webpack_require__(0);
@@ -891,11 +850,11 @@ var Drop = function () {
   }, {
     key: 'setStorePositions',
     value: function setStorePositions() {
-      var _getBoundingClientRec = (0, _dom.getBoundingClientRect)(this.el),
-          left = _getBoundingClientRec.left,
-          top = _getBoundingClientRec.top,
-          width = _getBoundingClientRec.width,
-          height = _getBoundingClientRec.height;
+      var _el$getBoundingClient = this.el.getBoundingClientRect(),
+          left = _el$getBoundingClient.left,
+          top = _el$getBoundingClient.top,
+          width = _el$getBoundingClient.width,
+          height = _el$getBoundingClient.height;
 
       _store2.default.targetPositions[this.index] = {
         top: top,

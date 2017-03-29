@@ -62,21 +62,7 @@
   <script>
     window.onload = function () {
       // 初始化被拖动元素
-      new Drag('.drag1', {
-        data: 101, // 要传递的数据
-        onDragStart: function (params) {
-          console.log('html 被拖元素监听到拖动开始')
-          params.methods.showStateicon('delete')
-        },
-        // onDragEnd: function (params) {
-        //   console.log('监听到拖动结束')
-        //   console.log('放下后被拖元素是否返回?', params.isBack)
-        //   console.log('当前被拖动的数据: ', params.data)
-        //   console.log('放下的位置是否在目标内: ', params.inTarget)
-        //   console.warn('加多一个目标实例')
-        //   data的默认值是那个当前dom
-        // }
-      })
+      new Drag('.drag1')
 
       new Drag('.drag2', {
         // data: 99, // 要传递的数据

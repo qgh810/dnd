@@ -222,7 +222,6 @@ const dragStore = {
    * @type {[time]} 动画时间 单位毫秒
    */
   [REMOVE_ANIMATION_TYPES.blost] (time = 150) {
-    console.log('yeah')
     let style = this.draggedNode && this.draggedNode.style
     if (!style) return
     style.transition = `all ${time / 1000}s ease`
@@ -249,7 +248,6 @@ const dragStore = {
   removeMark () {
     clearTimeout(this.removeMarkTid)
     this.removeMarkTid = setTimeout(() => {
-      console.log('removeMark')
       try {
         document.body.removeChild(this.markNode)
         this.draggedNode = null

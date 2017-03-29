@@ -1,5 +1,4 @@
 import { checkNode } from './utils/check'
-import { getBoundingClientRect } from './utils/dom'
 import store from './store'
 import { methods } from './store'
 
@@ -18,7 +17,8 @@ class Drag {
     this.el.style.userSelect = 'none'
     this.el.style.cursor = 'default'
 
-    this.options = this.checkOptions(options)
+    options = this.checkOptions(options)
+    this.options = options
     this.data = options.data
     this.mouseDownPosition = {left: -1, top: -1}
     this.mouseDragging = false
