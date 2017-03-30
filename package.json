@@ -1,6 +1,6 @@
 {
   "name": "dnd.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "drag and drop",
   "main": "dist/dnd.js",
   "scripts": {
@@ -14,6 +14,8 @@
   "keywords": [
     "drag",
     "drop",
+    "drag and drop",
+    "dnd",
     "js"
   ],
   "author": "qiuguohui",
