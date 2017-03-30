@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import Draggable from 'components/draggable'
-import Droppable from 'components/droppable'
+import Draggable from 'components/draggable'// form后面的地址根据实际情况而定// form后面的地址根据实际情况而定
+import Droppable from 'components/droppable'// form后面的地址根据实际情况而定
 
 export default {
   components: {
