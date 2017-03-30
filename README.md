@@ -169,12 +169,12 @@ options属性说明:
 
 回调函数参数中的methods说明:
 ```bash
-  提供一些方法供回调函数调用
-  destroyDrop: 销毁当前Drop对象
-  getStateIconNode: 获取跟随鼠标移动的状态图标dom节点
-  hideStateicon: 隐藏状态图标
-  removeDragedNode: 移除跟随鼠标移动的被拖元素
-  showStateicon: 显示状态图标
+提供一些方法供回调函数调用
+destroyDrop: 销毁当前Drop对象
+getStateIconNode: 获取跟随鼠标移动的状态图标dom节点
+hideStateicon: 隐藏状态图标
+removeDragedNode: 移除跟随鼠标移动的被拖元素
+showStateicon: 显示状态图标
 ```
 | 方法名 | 示例 | 参数说明 | 描述 |
 | :---  | :--- | :----  | :-- |
