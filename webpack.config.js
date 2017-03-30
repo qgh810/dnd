@@ -1,11 +1,15 @@
 var path = require('path');
 var webpack = require('webpack')
-var libraryName = 'draggable'
+var libraryName = 'dnd'
+
 module.exports = {
   entry: "./src/main.js",
   output: {
     path: __dirname,
-    filename: "dist/draggable.js",
+    filename: "dist/dnd.js",
+    library: libraryName,
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   module: {
     loaders: [

@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("dnd", [], factory);
+	else if(typeof exports === 'object')
+		exports["dnd"] = factory();
+	else
+		root["dnd"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -964,6 +974,7 @@ exports.default = IMAGES;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Drop = exports.Drag = undefined;
 
 var _drag = __webpack_require__(3);
 
@@ -975,25 +986,9 @@ var _drop2 = _interopRequireDefault(_drop);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var draggable = { Drag: _drag2.default, Drop: _drop2.default };
-
-if (true) {
-  window.Drag = _drag2.default;
-  window.Drop = _drop2.default;
-}
-
-exports.default = { Drag: _drag2.default, Drop: _drop2.default };
-
-// if ( typeof module === "object" && module && typeof module.exports === "object" ) {
-//   export default {Drag, Drop}
-// } else {
-//   window.Drag = Drag
-//   window.Drop = Drop
-// }
-//
-// if ( typeof window === "object" && typeof window.document === "object" ) {
-//     window.jQuery = window.$ = jQuery;
-// }
+exports.Drag = _drag2.default;
+exports.Drop = _drop2.default;
 
 /***/ })
 /******/ ]);
+});

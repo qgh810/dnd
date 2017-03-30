@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>html</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <script type="text/javascript" src="../dist/draggable.js"></script>
+    <script type="text/javascript" src="../dist/dnd.js"></script>
 
     <style>
       html, body {
@@ -109,6 +109,8 @@
   </body>
   <script>
     window.onload = function () {
+      var Drag = dnd.Drag
+      var Drop = dnd.Drop
       var rootNode = document.getElementsByClassName('app-root')[0]
 
       var draggableNodes = document.getElementsByClassName('draggable-node')

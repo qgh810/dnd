@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>最小化demo</title>
-    <script type="text/javascript" src="../dist/draggable.js"></script>
+    <script type="text/javascript" src="../dist/dnd.js"></script>
     <style>
       html, body { width:100%; height:100%; }
       body { margin:0; padding:20px; box-sizing:border-box; }
@@ -19,6 +19,8 @@
   </body>
 
   <script>
+    var Drag = dnd.Drag
+    var Drop = dnd.Drop
     new Drag('.drag')
     new Drop('.drop', {
       onDrop: function (params) {
