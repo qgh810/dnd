@@ -13,7 +13,7 @@
     <droppable
       class="drop-box"
       @dragstart="onDragStart"
-      @dragsend="onDragEnd"
+      @dragend="onDragEnd"
       @drop="onDrop"
       @dragenter="onDragEnter"
       @dragover="onDragOver"
