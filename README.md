@@ -80,13 +80,13 @@ new Drop(element, options)
 ### 参数说明
 -  创建
 ```js
-  new Drag(element, options)
-  new Drop(element, options)
-  ```
-  | 参数 | 是否必填 | 类型 | 说明 |
-  | :------------ |:---------------:| :---------------| :-----|
-  | element | 是 | String or htmlElementObject | 可以传入类名class 或者 id名 或者 dom节点 |
-  | options | 是 | Object | 相关参数和回调函数,具体说明看下面 |
+new Drag(element, options)
+new Drop(element, options)
+```
+| 参数 | 是否必填 | 类型 | 说明 |
+| :------------ |:---------------:| :---------------| :-----|
+| element | 是 | String or htmlElementObject | 可以传入类名class 或者 id名 或者 dom节点 |
+| options | 是 | Object | 相关参数和回调函数,具体说明看下面 |
 
 -  options说明 (Drag)
 
