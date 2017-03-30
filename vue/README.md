@@ -34,8 +34,8 @@ draggable.vue和droppable.vue是已经封装好的vue组件
 </template>
 
 <script>
-import Draggable from 'components/draggable1'
-import Droppable from 'components/droppable1'
+import Draggable from 'components/draggable'
+import Droppable from 'components/droppable'
 export default {
   components: {
     Draggable,

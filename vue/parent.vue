@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import Draggable from 'components/draggable1'
-import Droppable from 'components/droppable1'
+import Draggable from 'components/draggable'
+import Droppable from 'components/droppable'
 
 export default {
   components: {
