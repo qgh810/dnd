@@ -1,8 +1,13 @@
 ## dnd.js在VUE中使用
 
 拷贝项目中的draggable.vue和droppable.vue到你的项目中
+
 draggable.vue和droppable.vue是已经封装好的vue组件
-然后像下面这样使用 如果是react或者nagular也可以用类似的方法封装为组件然后使用
+然后像下面这样使用
+
+如果是react或者nagular也可以用类似的方法封装为组件然后使用
+
+具体使用说明请参考[详细说明文档](https://github.com/qgh810/dnd)
 
 ```html
 <template>
