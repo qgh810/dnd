@@ -1,4 +1,4 @@
-## draggable.js
+## dnd.js
 
 ##### 拖放库 drag and drop
 
