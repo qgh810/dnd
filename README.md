@@ -158,8 +158,9 @@ options属性说明:
 | onDragEnd | 否 | Function | 拖动结束时候调用 | 见下方说明 |
 
 回调函数参数params说明:
+
 | 属性 | 类型 | 描述 |
-| :---| :--- | :----|
+| :----- | :----- | :----- |
 | data | 不定 | 被拖动元素定义的data属性, 类型由Drag对象被创建的时候传入的data属性决定 |
 | el | Object | 当前dom节点 |
 | enter | Boolean | 是否进入当前范围的标志位, 布尔值 |
@@ -181,5 +182,5 @@ showStateicon: 显示状态图标
 | destroyDrop | params.methods.destroyDrop(name) | 参数类型: String, Drag对象的名字  | 销毁Drop对象,匹配所有名字跟传入参数一致的Drop对象并销毁, 销毁后将不能接收Drag对象 |
 | getStateIconNode | params.methods.getStateIconNode() | 无参数  | 返回跟随鼠标移动的状态图标dom节点 |
 | hideStateicon | params.methods.hideStateicon() | 无参数  | 隐藏跟随鼠标移动的状态图标(如果没有调用showStateicon函数的话图标默认不显示) |
-| removeDragedNode | params.methods.removeDragedNode('back') | 参数类型:String, 非必填, 可选: fade / blost / back  / 移除跟随鼠标移动的被拖元素, 如果没有参数则直接消失, 有参数表示执行消失动画后再消失 目前支持三种动画, 分别是: 褪色(fade), 爆炸(blost), 反弹(back), 三种动画对应不同也应用场景 |
+| removeDragedNode | params.methods.removeDragedNode('back') | 参数类型:String, 非必填, 可选: fade / blost / back  | 移除跟随鼠标移动的被拖元素, 如果没有参数则直接消失, 有参数表示执行消失动画后再消失 目前支持三种动画, 分别是: 褪色(fade), 爆炸(blost), 反弹(back), 三种动画对应不同也应用场景 |
 | showStateicon | params.methods.showStateicon('add') | 参数类型: String, 内置三种常用图标: 添加('add'), 拒绝('reject'), 删除('delete'),传入对应的名字即可, 也可以自定义图标,直接传入图片的完整地址  | 显示状态图标, 调用后会在鼠标旁边出现一个跟随鼠标移动的小图标, 如果要隐藏只需要调用hideStateicon函数即可 |
