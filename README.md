@@ -157,7 +157,7 @@ options属性说明:
 | onDrop | 是 | Function | 被拖动元素在自己上方放下时调用 | 见下方说明 |
 | onDragEnd | 否 | Function | 拖动结束时候调用 | 见下方说明 |
 
-回调函数参数params说明:
+回调函数的参数params说明:
 
 | 属性 | 类型 | 描述 |
 | :----- | :----- | :----- |
@@ -168,13 +168,18 @@ options属性说明:
 | name | String | Drop名称, 在销毁当前Drag对象时候需要用到 |
 | sourceNode | Object | 被拖动元素的dom节点 |
 
-回调函数参数中的methods说明:
+回调函数的参数中的methods对象说明:
 ```bash
 提供一些方法供回调函数调用
+
 destroyDrop: 销毁当前Drop对象
+
 getStateIconNode: 获取跟随鼠标移动的状态图标dom节点
+
 hideStateicon: 隐藏状态图标
+
 removeDragedNode: 移除跟随鼠标移动的被拖元素
+
 showStateicon: 显示状态图标
 ```
 | 方法名 | 示例 | 参数说明 | 描述 |
