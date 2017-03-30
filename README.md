@@ -22,7 +22,8 @@
   <script type="text/javascript" src="dist/dnd.js"></script>
   ```
 
-  ### 使用方法
+### 使用方法
+  最简单的使用方法可以可以查看[最小demo](https://github.com/qgh810/dnd/blob/master/demo/demo-mini.html)
   ```js
   import { Drag, Drop } from 'dnd.js'
 
@@ -37,5 +38,41 @@
   new Drop(element, options)
   ```
 
-  ### 参数说明
-  ...
+  最小demo代码展示
+  ```html
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <title>最小化demo</title>
+      <script type="text/javascript" src="../dist/dnd.js"></script>
+      <style>
+        html, body { width:100%; height:100%; }
+        body { margin:0; padding:20px; box-sizing:border-box; }
+        .drop { margin:20px auto; width:100%; height:100px; border:1px solid #000; }
+      </style>
+    </head>
+
+    <body>
+      <div class="drop"></div>
+      <div class="drag">
+        拖动我到上方框框
+      </div>
+    </body>
+
+    <script>
+      var Drag = dnd.Drag
+      var Drop = dnd.Drop
+      new Drag('.drag')
+      new Drop('.drop', {
+        onDrop: function (params) {
+          params.el.appendChild(params.sourceNode)
+        }
+      })
+    </script>
+  </html>
+  ```
+
+
+### 参数说明
+  待完善...
