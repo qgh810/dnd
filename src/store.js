@@ -174,7 +174,7 @@ const dragStore = {
 
   /**
    * 显示状态icon
-   * url 可以是图片绝对路径 也可以是 add | reject | delete
+   * url 可以是图片绝对路径 也可以是 add | error | delete
    */
   showStateicon (url) {
     setTimeout(() => {

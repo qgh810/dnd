@@ -4,7 +4,7 @@
 
 [查看DEMO](http://qgh810.github.io/src/dnd/index.html)
 
-不依赖任何第三方库的拖放库,兼容低版本浏览器,兼容移动端,自带常用动画效果,[如果在vue项目中使用](https://github.com/qgh810/dnd/tree/master/vue),可以拷贝上面已经封装好的组件直接使用.
+不依赖任何第三方库的拖放库,兼容低版本浏览器,兼容移动端,自带常用动画效果,[如果在vue项目中使用](https://github.com/qgh810/dnd/tree/master/vue),可以拷贝上面vue文件夹中已经封装好的组件直接使用.
 
 <img src="https://raw.githubusercontent.com/qgh810/draggable/master/demo/demo.gif" width="650">
 
@@ -19,7 +19,7 @@ npm install dnd.js --save
 
 ```bash
 下载项目中的dist/dnd.js, 然后用script标签插入到你的项目中, 如下
-这种方式会在window对象上挂载dnd属性
+这种方式可以通过window.dnd访问
 ```
 
 ```html
@@ -108,7 +108,7 @@ new Drop(element, options)
   new Drag(element, options)
 ```
 
-options属性说明:
+##### options属性说明:
 
 | 参数 | 是否必填 | 类型 | 说明 |
 | :-------- |:-----:| :-----:| :-----|
@@ -147,7 +147,7 @@ options属性说明:
   new Drop(element, options)
 ```
 
-options属性说明:
+##### options属性说明:
 
 | 属性 | 是否必填 | 类型 | 说明 | 回调函数参数说明 |
 | :-------- |:-----:| :-----:| :-----| :---|
@@ -159,7 +159,7 @@ options属性说明:
 | onDrop | 是 | Function | 被拖动元素在自己上方放下时调用 | 见下方说明 |
 | onDragEnd | 否 | Function | 拖动结束时候调用 | 见下方说明 |
 
-回调函数的参数params说明:
+##### 回调函数的参数params说明:
 
 | 属性 | 类型 | 描述 |
 | :----- | :----- | :----- |
@@ -170,19 +170,21 @@ options属性说明:
 | name | String | Drop名称, 在销毁当前Drag对象时候需要用到 |
 | sourceNode | Object | 被拖动元素的dom节点 |
 
-回调函数的参数中的methods对象说明:
+##### 回调函数的参数中的methods对象说明:
 ```bash
 提供一些方法供回调函数调用
 
-destroyDrop: 销毁当前Drop对象
 
-getStateIconNode: 获取跟随鼠标移动的状态图标dom节点
+showStateicon: 显示状态图标
 
 hideStateicon: 隐藏状态图标
 
 removeDragedNode: 移除跟随鼠标移动的被拖元素
 
-showStateicon: 显示状态图标
+getStateIconNode: 获取跟随鼠标移动的状态图标dom节点
+
+destroyDrop: 销毁当前Drop对象
+
 ```
 | 方法名 | 示例 | 参数说明 | 描述 |
 | :---  | :--- | :----  | :-- |
@@ -190,4 +192,4 @@ showStateicon: 显示状态图标
 | getStateIconNode | params.methods.getStateIconNode() | 无参数  | 返回跟随鼠标移动的状态图标dom节点 |
 | hideStateicon | params.methods.hideStateicon() | 无参数  | 隐藏跟随鼠标移动的状态图标(如果没有调用showStateicon函数的话图标默认不显示) |
 | removeDragedNode | params.methods.removeDragedNode('back') | 参数类型:String, 非必填, 可选: fade / blost / back  | 移除跟随鼠标移动的被拖元素, 如果没有参数则直接消失, 有参数表示执行消失动画后再消失 目前支持三种动画, 分别是: 褪色(fade), 爆炸(blost), 反弹(back), 三种动画对应不同也应用场景 |
-| showStateicon | params.methods.showStateicon('add') | 参数类型: String, 内置三种常用图标: 添加('add'), 拒绝('reject'), 删除('delete'),传入对应的名字即可, 也可以自定义图标,直接传入图片的完整地址  | 显示状态图标, 调用后会在鼠标旁边出现一个跟随鼠标移动的小图标, 如果要隐藏只需要调用hideStateicon函数即可 |
+| showStateicon | params.methods.showStateicon('add') | 参数类型: String, 内置三种常用图标: 添加('add'), 错误('error'), 删除('delete'), 拒绝(reject),传入对应的名字即可, 也可以自定义图标,直接传入图片的完整地址  | 显示状态图标, 调用后会在鼠标旁边出现一个跟随鼠标移动的小图标, 如果要隐藏只需要调用hideStateicon函数即可 |

@@ -133,7 +133,7 @@
         },
         onDragEnter: function (params) {
           if (params.data === 1) {
-            params.methods.showStateicon('reject')
+            params.methods.showStateicon('error')
             params.el.style.background = 'rgba(255, 0, 0, 0.2)'
           } else {
             params.methods.showStateicon('add')
@@ -171,7 +171,7 @@
         },
         onDragEnter: function (params) {
           if (params.data === 2) {
-            params.methods.showStateicon('reject')
+            params.methods.showStateicon('error')
             params.el.style.background = 'rgba(255, 0, 0, 0.2)'
           } else {
             params.methods.showStateicon('add')
