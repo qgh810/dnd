@@ -24,6 +24,7 @@
     new Drag('.drag')
     new Drop('.drop', {
       onDrop: function (params) {
+        console.log(params)
         params.el.appendChild(params.sourceNode)
       }
     })
