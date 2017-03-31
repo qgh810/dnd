@@ -175,27 +175,34 @@ new Drop(element, options)
 提供一些方法供回调函数调用
 
 
-- showStateicon: 显示状态图标
-例如:
+- showStateicon: 显示状态图标<br />例如:<br />
 showStateicon('add')
+<br />
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/show-add.gif">
-showStateicon('error')
+<br />
+showStateicon('error')<br />
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/show-error.gif">
-你也可以传入自己喜欢的图片 例如这样: showStateicon('https://ss2.bdstatic.com/lfoZeXSm1A5BphGlnYG/icon/10062.png')
+<br />
+你也可以传入自己喜欢的图片 例如这样:<br /> showStateicon('https://ss2.bdstatic.com/lfoZeXSm1A5BphGlnYG/icon/10062.png')<br />
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/show-taobao.gif">
+<br />
 还有 showStateicon('delete') 和 showStateicon('reject') 分别出现'删除'图标和'禁止'的图标
-
+<br />
 - hideStateicon: 隐藏状态图标
-
-
-- removeDragedNode: 移除跟随鼠标移动的被拖元素
-例如:
+<br />
+- removeDragedNode: 移除跟随鼠标移动的被拖元素<br />例如:<br />
 removeDragedNode('fade')
+<br />
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/hide-node-fade.gif">
+<br />
 removeDragedNode('back')
+<br />
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/hide-node-back.gif">
+<br />
 removeDragedNode('blost')
+<br />
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/hide-node-blost.gif">
+<br />
 
 
 - getStateIconNode: 获取跟随鼠标移动的状态图标dom节点
