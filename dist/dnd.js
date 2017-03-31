@@ -173,7 +173,7 @@ var dragStore = (_dragStore = {
     this._inTarget = false;
     this._prevValidIndex = -1;
     this.targetIndex = -1;
-    this.hideStateicon();
+    this.hideStateIcon();
   },
 
 
@@ -299,11 +299,11 @@ var dragStore = (_dragStore = {
    * 显示状态icon
    * url 可以是图片绝对路径 也可以是 add | error | delete
    */
-  showStateicon: function showStateicon(url) {
+  showStateIcon: function showStateIcon(url) {
     var _this3 = this;
 
     setTimeout(function () {
-      if (_this3.isMobile) return console.warn('showStateicon仅在pc端口可用 请参考相关说明' + _config.DOCUMENT_ADDR);
+      if (_this3.isMobile) return console.warn('showStateIcon仅在pc端口可用 请参考相关说明' + _config.DOCUMENT_ADDR);
       url = _iconImages2.default[url] || url || 'add';
       var iconStyle = _this3.stateIcon.style;
       iconStyle.display = 'block';
@@ -315,7 +315,7 @@ var dragStore = (_dragStore = {
   /**
    * 隐藏状态icon
    */
-  hideStateicon: function hideStateicon() {
+  hideStateIcon: function hideStateIcon() {
     try {
       this.stateIcon.style.display = 'none';
     } catch (e) {}
@@ -402,8 +402,8 @@ exports.default = dragStore;
  */
 
 var methods = exports.methods = {
-  showStateicon: dragStore.showStateicon.bind(dragStore),
-  hideStateicon: dragStore.hideStateicon.bind(dragStore),
+  showStateIcon: dragStore.showStateIcon.bind(dragStore),
+  hideStateIcon: dragStore.hideStateIcon.bind(dragStore),
   getStateIconNode: dragStore.getStateIconNode.bind(dragStore),
   removeDragedNode: dragStore.removeDragedNode.bind(dragStore),
   destroyDrop: dragStore.destroyDrop.bind(dragStore)
@@ -582,7 +582,7 @@ var Drag = function () {
       this.el.onmouseup = null;
       this.mark && (this.mark.onmousemove = null);
       this.mark && (this.mark.onmouseup = null);
-      _store.methods.hideStateicon();
+      _store.methods.hideStateIcon();
       _store.methods.removeDragedNode();
       document.removeEventListener('mouseup', this.onElMouseUp.bind(this));
     }

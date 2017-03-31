@@ -52,7 +52,7 @@ const dragStore = {
     this._inTarget = false
     this._prevValidIndex = -1
     this.targetIndex = -1
-    this.hideStateicon()
+    this.hideStateIcon()
   },
 
   /**
@@ -176,9 +176,9 @@ const dragStore = {
    * 显示状态icon
    * url 可以是图片绝对路径 也可以是 add | error | delete
    */
-  showStateicon (url) {
+  showStateIcon (url) {
     setTimeout(() => {
-      if (this.isMobile) return console.warn('showStateicon仅在pc端口可用 请参考相关说明' + DOCUMENT_ADDR)
+      if (this.isMobile) return console.warn('showStateIcon仅在pc端口可用 请参考相关说明' + DOCUMENT_ADDR)
       url = IMAGES[url] || url || 'add'
       let iconStyle = this.stateIcon.style
       iconStyle.display = 'block'
@@ -189,7 +189,7 @@ const dragStore = {
   /**
    * 隐藏状态icon
    */
-  hideStateicon () {
+  hideStateIcon () {
     try {
       this.stateIcon.style.display = 'none'
     } catch (e) {}
@@ -301,8 +301,8 @@ export default dragStore
  * 供用户调用的静态方法
  */
 export const methods = {
-  showStateicon: dragStore.showStateicon.bind(dragStore),
-  hideStateicon: dragStore.hideStateicon.bind(dragStore),
+  showStateIcon: dragStore.showStateIcon.bind(dragStore),
+  hideStateIcon: dragStore.hideStateIcon.bind(dragStore),
   getStateIconNode: dragStore.getStateIconNode.bind(dragStore),
   removeDragedNode: dragStore.removeDragedNode.bind(dragStore),
   destroyDrop: dragStore.destroyDrop.bind(dragStore),

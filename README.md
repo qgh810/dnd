@@ -175,20 +175,20 @@ new Drop(element, options)
 提供一些方法供回调函数调用
 
 
-- showStateicon: 显示状态图标<br />例如:<br />
-showStateicon('add')
+- showStateIcon: 显示状态图标<br />例如:<br />
+showStateIcon('add')
 <br />
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/show-add.gif">
 <br />
-showStateicon('error')<br />
+showStateIcon('error')<br />
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/show-error.gif">
 <br />
-你也可以传入自己喜欢的图片 例如这样:<br /> showStateicon('https://ss2.bdstatic.com/lfoZeXSm1A5BphGlnYG/icon/10062.png')<br />
+你也可以传入自己喜欢的图片 例如这样:<br /> showStateIcon('https://ss2.bdstatic.com/lfoZeXSm1A5BphGlnYG/icon/10062.png')<br />
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/show-taobao.gif">
 <br />
-还有 showStateicon('delete') 和 showStateicon('reject') 分别出现'删除'图标和'禁止'的图标
+还有 showStateIcon('delete') 和 showStateIcon('reject') 分别出现'删除'图标和'禁止'的图标
 <br />
-- hideStateicon: 隐藏状态图标
+- hideStateIcon: 隐藏状态图标
 <br />
 - removeDragedNode: 移除跟随鼠标移动的被拖元素<br />例如:<br />
 removeDragedNode('fade')
@@ -213,8 +213,8 @@ removeDragedNode('blost')
 
 | 方法名 | 示例 | 参数说明 | 描述 |
 | :---  | :--- | :----  | :-- |
-| showStateicon | params.methods.showStateicon('add') | 参数类型: String, 内置三种常用图标: 添加('add'), 错误('error'), 删除('delete'), 拒绝(reject),传入对应的名字即可, 也可以自定义图标,直接传入图片的完整地址  | 显示状态图标, 调用后会在鼠标旁边出现一个跟随鼠标移动的小图标, 如果要隐藏只需要调用hideStateicon函数即可 |
-| hideStateicon | params.methods.hideStateicon() | 无参数  | 隐藏跟随鼠标移动的状态图标(如果没有调用showStateicon函数的话图标默认不显示) |
+| showStateIcon | params.methods.showStateIcon('add') | 参数类型: String, 内置三种常用图标: 添加('add'), 错误('error'), 删除('delete'), 拒绝(reject),传入对应的名字即可, 也可以自定义图标,直接传入图片的完整地址  | 显示状态图标, 调用后会在鼠标旁边出现一个跟随鼠标移动的小图标, 如果要隐藏只需要调用hideStateIcon函数即可 |
+| hideStateIcon | params.methods.hideStateIcon() | 无参数  | 隐藏跟随鼠标移动的状态图标(如果没有调用showStateIcon函数的话图标默认不显示) |
 | removeDragedNode | params.methods.removeDragedNode(animationName, time) | animationName(动画类型), 参数类型:String, 非必填, 可选: fade / blost / back, time(动画时间, 单位毫秒), 参数类型: Number, 非必填  | 移除跟随鼠标移动的被拖元素, 如果没有参数则直接消失, 有参数表示执行消失动画后再消失 目前支持三种动画, 分别是: 褪色(fade), 爆炸(blost), 反弹(back), 三种动画对应不同也应用场景, 例如: removeDragedNode('blost', 300) |
 | getStateIconNode | params.methods.getStateIconNode() | 无参数  | 返回跟随鼠标移动的状态图标dom节点 |
 | destroyDrop | params.methods.destroyDrop({name}) | 参数类型: String, Drag对象的名字  | 销毁Drop对象,匹配所有名字跟传入参数一致的Drop对象并销毁, 销毁后将不能接收Drag对象 |

@@ -133,15 +133,15 @@
         },
         onDragEnter: function (params) {
           if (params.data === 1) {
-            params.methods.showStateicon('error')
+            params.methods.showStateIcon('error')
             params.el.style.background = 'rgba(255, 0, 0, 0.2)'
           } else {
-            params.methods.showStateicon('add')
+            params.methods.showStateIcon('add')
             params.el.style.background = 'rgba(0, 0, 255, 0.2)'
           }
         },
         onDragLeave: function (params) {
-          params.methods.hideStateicon()
+          params.methods.hideStateIcon()
           if (params.data === 1) {
             params.el.style.background = 'rgba(255, 0, 0, 0.1)'
           } else {
@@ -171,15 +171,15 @@
         },
         onDragEnter: function (params) {
           if (params.data === 2) {
-            params.methods.showStateicon('error')
+            params.methods.showStateIcon('error')
             params.el.style.background = 'rgba(255, 0, 0, 0.2)'
           } else {
-            params.methods.showStateicon('add')
+            params.methods.showStateIcon('add')
             params.el.style.background = 'rgba(0, 0, 255, 0.2)'
           }
         },
         onDragLeave: function (params) {
-          params.methods.hideStateicon()
+          params.methods.hideStateIcon()
           if (params.data === 2) {
             params.el.style.background = 'rgba(255, 0, 0, 0.1)'
           } else {
@@ -205,11 +205,11 @@
           params.el.style.background = 'rgba(0, 0, 255, 0.1)'
         },
         onDragEnter: function (params) {
-          params.methods.showStateicon('delete')
+          params.methods.showStateIcon('delete')
           params.el.style.background = 'rgba(255, 0, 0, 0.3)'
         },
         onDragLeave: function (params) {
-          params.methods.hideStateicon()
+          params.methods.hideStateIcon()
           params.el.style.background = 'rgba(0, 0, 255, 0.1)'
         },
         onDragEnd: function (params) {
