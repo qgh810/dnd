@@ -183,10 +183,11 @@ showStateicon('error')
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/show-error.gif">
 你也可以传入自己喜欢的图片 例如这样: showStateicon('https://ss2.bdstatic.com/lfoZeXSm1A5BphGlnYG/icon/10062.png')
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/show-taobao.gif">
-hideStateicon: 隐藏状态图标
+- hideStateicon: 隐藏状态图标
 
 
-- removeDragedNode: 移除跟随鼠标移动的被拖元素
+- removeDragedNode: 移除跟随鼠标移动的被拖元素 
+例如:
 removeDragedNode('fade')
 <img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/hide-node-fade.gif">
 removeDragedNode('back')
