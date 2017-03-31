@@ -138,6 +138,7 @@ class Drag {
 
 
   onElTouchMove (e) {
+    e.preventDefault()
     store.isMobile = true
     if (this.mouseDownPosition.left === -1) {
       let {pageX, pageY} = e.touches[0]

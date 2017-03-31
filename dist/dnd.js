@@ -630,6 +630,7 @@ var Drag = function () {
   }, {
     key: 'onElTouchMove',
     value: function onElTouchMove(e) {
+      e.preventDefault();
       _store2.default.isMobile = true;
       if (this.mouseDownPosition.left === -1) {
         var _e$touches$ = e.touches[0],
