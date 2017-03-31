@@ -188,6 +188,7 @@ showStateIcon('error')<br />
 <br />
 还有 showStateIcon('delete') 和 showStateIcon('reject') 分别出现'删除'图标和'禁止'的图标
 <br />
+<br />
 
 - hideStateIcon: 隐藏状态图标
 <br />
