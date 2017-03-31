@@ -188,8 +188,10 @@ showStateIcon('error')<br />
 <br />
 还有 showStateIcon('delete') 和 showStateIcon('reject') 分别出现'删除'图标和'禁止'的图标
 <br />
+
 - hideStateIcon: 隐藏状态图标
 <br />
+
 - removeDragedNode: 移除跟随鼠标移动的被拖元素<br />例如:<br />
 removeDragedNode('fade')
 <br />
