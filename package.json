@@ -1,6 +1,6 @@
 {
   "name": "dnd.js",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "drag and drop",
   "main": "dist/dnd.js",
   "scripts": {
