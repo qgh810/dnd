@@ -164,7 +164,7 @@ class Drag {
       removeanimationtype: 1,
     }
     for (let option in baseOptions) {
-      !options[options] && (options[options] = baseOptions[option])
+      !options[option] && (options[option] = baseOptions[option])
     }
     return options
   }
