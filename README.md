@@ -2,7 +2,7 @@
 
 ##### 拖放库 drag and drop
 
-[查看DEMO](http://qgh810.github.io/src/dnd/index.html)
+[查看DEMO](http://qgh810.github.io/demo/dnd/index.html)
 
 不依赖任何第三方库的拖放库,兼容低版本浏览器,兼容移动端,自带常用动画效果,[如果在vue项目中使用](https://github.com/qgh810/dnd/tree/master/vue),可以拷贝上面vue文件夹中已经封装好的组件直接使用.
 
@@ -178,13 +178,13 @@ new Drop(element, options)
 - showStateIcon: 显示状态图标<br />例如:<br />
 showStateIcon('add')
 <br />
-<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/show-add.gif">
+<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/demo/dnd/assets/images/show-add.gif">
 <br />
 showStateIcon('error')<br />
-<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/show-error.gif">
+<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/demo/dnd/assets/images/show-error.gif">
 <br />
 你也可以传入自己喜欢的图片 例如这样:<br /> showStateIcon('https://ss2.bdstatic.com/lfoZeXSm1A5BphGlnYG/icon/10062.png')<br />
-<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/show-taobao.gif">
+<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/demo/dnd/assets/images/show-taobao.gif">
 <br />
 还有 showStateIcon('delete') 和 showStateIcon('reject') 分别出现'删除'图标和'禁止'的图标
 <br />
@@ -196,15 +196,15 @@ showStateIcon('error')<br />
 - removeDragedNode: 移除跟随鼠标移动的被拖元素<br />例如:<br />
 removeDragedNode('fade')
 <br />
-<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/hide-node-fade.gif">
+<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/demo/dnd/assets/images/hide-node-fade.gif">
 <br />
 removeDragedNode('back')
 <br />
-<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/hide-node-back.gif">
+<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/demo/dnd/assets/images/hide-node-back.gif">
 <br />
 removeDragedNode('blost')
 <br />
-<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/src/dnd/assets/images/hide-node-blost.gif">
+<img src="https://raw.githubusercontent.com/qgh810/qgh810.github.io/master/demo/dnd/assets/images/hide-node-blost.gif">
 <br />
 
 
