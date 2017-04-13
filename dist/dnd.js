@@ -481,6 +481,7 @@ var Drag = function () {
       this.el = (0, _check.checkNode)(el);
       if (!this.el) return;
 
+      this.el.style.MozUserSelect = 'none'; // 兼容火狐
       this.el.style.userSelect = 'none';
       this.el.style.cursor = 'default';
 
@@ -663,7 +664,7 @@ var Drag = function () {
         removeanimationtype: 1
       };
       for (var option in baseOptions) {
-        !options[options] && (options[options] = baseOptions[option]);
+        !options[option] && (options[option] = baseOptions[option]);
       }
       return options;
     }

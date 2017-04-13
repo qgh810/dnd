@@ -14,6 +14,7 @@ class Drag {
     this.el = checkNode(el)
     if (!this.el) return
 
+    this.el.style.MozUserSelect = 'none' // 兼容火狐
     this.el.style.userSelect = 'none'
     this.el.style.cursor = 'default'
 
