@@ -158,7 +158,9 @@
             params.methods.removeDragedNode('back')
           } else {
             params.methods.removeDragedNode('fade')
-            params.el.appendChild(params.sourceNode.cloneNode(true))
+            var newNode = params.sourceNode.cloneNode(true)
+            params.el.appendChild(newNode)
+            createNewDrap(newNode)
           }
         }
       })
@@ -196,7 +198,9 @@
             params.methods.removeDragedNode('back')
           } else {
             params.methods.removeDragedNode('fade')
-            params.el.appendChild(params.sourceNode.cloneNode(true))
+            var newNode = params.sourceNode.cloneNode(true)
+            params.el.appendChild(newNode)
+            createNewDrap(newNode)
           }
         }
       })
@@ -222,6 +226,22 @@
           rootNode.removeChild(params.sourceNode)
         }
       })
+
+      /**
+       * 放入重新创建可拖拽元素
+       * @param  {[type]} element [description]
+       * @return {[type]}         [description]
+       */
+      function createNewDrap (element) {
+        new Drag(element, {
+          onDragEnd: function (params) {
+            console.log(params.el)
+            var parent = params.el.parentElement
+            parent.removeChild(params.el)
+          }
+        })
+      }
     }
+
   </script>
 </html>
