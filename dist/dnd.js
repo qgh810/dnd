@@ -457,6 +457,8 @@ var _store = __webpack_require__(1);
 
 var _store2 = _interopRequireDefault(_store);
 
+__webpack_require__(7);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -702,9 +704,16 @@ var Drag = function () {
           left = _position.left,
           top = _position.top;
 
+      var _el$getBoundingClient = this.el.getBoundingClientRect(),
+          width = _el$getBoundingClient.width,
+          height = _el$getBoundingClient.height;
+
       style.position = 'absolute';
       style.left = left + 'px';
       style.top = top + 'px';
+      style.width = width + 'px';
+      style.height = height + 'px';
+      style.textAlign = this.el.currentStyle.textAlign;
       style.transform = 'translate(0,0)';
       style.zIndex = 1000;
       style.margin = 0;
@@ -992,6 +1001,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.Drag = _drag2.default;
 exports.Drop = _drop2.default;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+HTMLElement.prototype.__defineGetter__('currentStyle', function () {
+  return this.ownerDocument.defaultView.getComputedStyle(this, null);
+});
 
 /***/ })
 /******/ ]);

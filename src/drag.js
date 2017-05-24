@@ -1,7 +1,7 @@
 import { checkNode } from './utils/check'
 import store from './store'
 import { methods } from './store'
-
+import './utils/currentStyle'
 class Drag {
   constructor (el, options) {
     this.initData(el, options) && this.init()
@@ -194,9 +194,13 @@ class Drag {
     let dom = store.draggedNode
     let style = dom.style
     let { left, top } = this.position
+    let { width, height } = this.el.getBoundingClientRect()
     style.position = 'absolute'
     style.left = left + 'px'
     style.top = top + 'px'
+    style.width = width +　'px'
+    style.height = height + 'px'
+    style.textAlign = this.el.currentStyle.textAlign
     style.transform = 'translate(0,0)'
     style.zIndex = 1000
     style.margin = 0
