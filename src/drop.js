@@ -1,6 +1,7 @@
 import { checkNode } from './utils/check'
 import { DOCUMENT_ADDR } from './config'
 import store from './store'
+import { methods } from './store'
 
 class Drop {
   constructor (el, options) {
@@ -15,7 +16,7 @@ class Drop {
     if (!this.el) return
     this.options = this.checkOptions(options)
     if (!this.options) return
-
+    this.methods = methods
     this.index = -1 // 当前索引
     return true
   }

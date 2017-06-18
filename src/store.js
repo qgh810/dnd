@@ -266,11 +266,14 @@ const dragStore = {
    * name 实例名称
    */
   destroyDrop (name) {
+    let result = false
     this.targets.forEach((item, i) => {
       if (item.name === name) {
         this.removeDrop(i)
+        result = true
       }
     })
+    return result
   },
 
   /**
