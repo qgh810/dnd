@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -377,11 +377,14 @@ var dragStore = (_dragStore = {
 }), _defineProperty(_dragStore, 'destroyDrop', function destroyDrop(name) {
   var _this6 = this;
 
+  var result = false;
   this.targets.forEach(function (item, i) {
     if (item.name === name) {
       _this6.removeDrop(i);
+      result = true;
     }
   });
+  return result;
 }), _defineProperty(_dragStore, 'removeDrop', function removeDrop(index) {
   delete this.targets[index];
   delete this.targetOnDragStarts[index];
@@ -457,7 +460,7 @@ var _store = __webpack_require__(1);
 
 var _store2 = _interopRequireDefault(_store);
 
-__webpack_require__(7);
+__webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -796,7 +799,7 @@ var Drop = function () {
       if (!this.el) return;
       this.options = this.checkOptions(options);
       if (!this.options) return;
-
+      this.methods = _store.methods;
       this.index = -1; // 当前索引
       return true;
     }
@@ -984,6 +987,17 @@ exports.default = IMAGES;
 "use strict";
 
 
+HTMLElement.prototype.__defineGetter__('currentStyle', function () {
+  return this.ownerDocument.defaultView.getComputedStyle(this, null);
+});
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -1001,17 +1015,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.Drag = _drag2.default;
 exports.Drop = _drop2.default;
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-HTMLElement.prototype.__defineGetter__('currentStyle', function () {
-  return this.ownerDocument.defaultView.getComputedStyle(this, null);
-});
 
 /***/ })
 /******/ ]);
