@@ -281,6 +281,8 @@ var dragStore = (_dragStore = {
       }
     }
 
+    console.log('目标索引: ', targetIndex);
+    console.log('目标位置: ', this.targetPositions);
     return targetIndex;
   },
 
@@ -377,13 +379,16 @@ var dragStore = (_dragStore = {
 }), _defineProperty(_dragStore, 'destroyDrop', function destroyDrop(name) {
   var _this6 = this;
 
+  console.log('dnd销毁: ', name);
   var result = false;
+  console.log(this.targets);
   this.targets.forEach(function (item, i) {
     if (item.name === name) {
       _this6.removeDrop(i);
       result = true;
     }
   });
+  console.log('dnd销毁结果: ', result);
   return result;
 }), _defineProperty(_dragStore, 'removeDrop', function removeDrop(index) {
   delete this.targets[index];

@@ -160,6 +160,8 @@ const dragStore = {
       }
     }
 
+    console.log('目标索引: ', targetIndex)
+    console.log('目标位置: ', this.targetPositions)
     return targetIndex
   },
 
@@ -266,13 +268,16 @@ const dragStore = {
    * name 实例名称
    */
   destroyDrop (name) {
+    console.log('dnd销毁: ', name)
     let result = false
+    console.log(this.targets)
     this.targets.forEach((item, i) => {
       if (item.name === name) {
         this.removeDrop(i)
         result = true
       }
     })
+    console.log('dnd销毁结果: ', result)
     return result
   },
 
