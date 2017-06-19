@@ -53,7 +53,8 @@ class Drop {
   setStore () {
     let index = store.targets.push({
       el: this.el,
-      name: this.options.name
+      name: this.options.name,
+      expand: this.options.expand
     }) - 1
     this.index = index
 

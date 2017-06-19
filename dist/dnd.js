@@ -160,6 +160,7 @@ var dragStore = (_dragStore = {
         el: _this.targets[index].el,
         sourceNode: _this.sourceNode,
         name: _this.targets[index].name,
+        expand: _this.targets[index].expand,
         methods: methods
       });
     });
@@ -196,6 +197,7 @@ var dragStore = (_dragStore = {
           el: this.targets[this.targetIndex].el,
           sourceNode: this.sourceNode,
           name: this.targets[this.targetIndex].name,
+          expand: this.targets[this.targetIndex].expand,
           methods: methods
         };
         this.onDragEnters[this.targetIndex](_params);
@@ -207,6 +209,7 @@ var dragStore = (_dragStore = {
         el: this.targets[this.targetIndex].el,
         sourceNode: this.sourceNode,
         name: this.targets[this.targetIndex].name,
+        expand: this.targets[this.targetIndex].expand,
         pageX: pageX,
         pageY: pageY,
         methods: methods
@@ -222,6 +225,7 @@ var dragStore = (_dragStore = {
           el: this.targets[this._prevValidIndex].el,
           sourceNode: this.sourceNode,
           name: this.targets[this._prevValidIndex].name,
+          expand: this.targets[this._prevValidIndex].expand,
           methods: methods
         };
         this.onDragLeaves[this._prevValidIndex](_params2);
@@ -244,6 +248,7 @@ var dragStore = (_dragStore = {
         el: this.targets[this.targetIndex].el,
         sourceNode: this.sourceNode,
         name: this.targets[this.targetIndex].name,
+        expand: this.targets[this.targetIndex].expand,
         methods: methods
       };
       this.targetIndex >= 0 && this.onDrops[this.targetIndex](params);
@@ -258,6 +263,7 @@ var dragStore = (_dragStore = {
         el: _this2.targets[index].el,
         sourceNode: _this2.sourceNode,
         name: _this2.targets[index].name,
+        expand: _this2.targets[index].expand,
         methods: methods
       };
       fn(params);
@@ -850,7 +856,8 @@ var Drop = function () {
     value: function setStore() {
       var index = _store2.default.targets.push({
         el: this.el,
-        name: this.options.name
+        name: this.options.name,
+        expand: this.options.expand
       }) - 1;
       this.index = index;
 

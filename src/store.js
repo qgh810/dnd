@@ -41,6 +41,7 @@ const dragStore = {
       el: this.targets[index].el,
       sourceNode: this.sourceNode,
       name: this.targets[index].name,
+      expand: this.targets[index].expand,
       methods
     }))
   },
@@ -74,6 +75,7 @@ const dragStore = {
           el: this.targets[this.targetIndex].el,
           sourceNode: this.sourceNode,
           name: this.targets[this.targetIndex].name,
+          expand: this.targets[this.targetIndex].expand,
           methods,
         }
         this.onDragEnters[this.targetIndex](params)
@@ -85,6 +87,7 @@ const dragStore = {
         el: this.targets[this.targetIndex].el,
         sourceNode: this.sourceNode,
         name: this.targets[this.targetIndex].name,
+        expand: this.targets[this.targetIndex].expand,
         pageX,
         pageY,
         methods,
@@ -100,6 +103,7 @@ const dragStore = {
           el: this.targets[this._prevValidIndex].el,
           sourceNode: this.sourceNode,
           name: this.targets[this._prevValidIndex].name,
+          expand: this.targets[this._prevValidIndex].expand,
           methods,
         }
         this.onDragLeaves[this._prevValidIndex](params)
@@ -119,6 +123,7 @@ const dragStore = {
         el: this.targets[this.targetIndex].el,
         sourceNode: this.sourceNode,
         name: this.targets[this.targetIndex].name,
+        expand: this.targets[this.targetIndex].expand,
         methods,
       }
       this.targetIndex >= 0 && this.onDrops[this.targetIndex](params)
@@ -133,6 +138,7 @@ const dragStore = {
         el: this.targets[index].el,
         sourceNode: this.sourceNode,
         name: this.targets[index].name,
+        expand: this.targets[index].expand,
         methods,
       }
       fn(params)
