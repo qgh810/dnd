@@ -549,7 +549,15 @@ var Drag = function () {
 
   }, {
     key: 'onElMousemove',
-    value: function onElMousemove() {
+    value: function onElMousemove(e) {
+      var pageX = e.pageX,
+          pageY = e.pageY;
+      var _mouseDownPosition = this.mouseDownPosition,
+          left = _mouseDownPosition.left,
+          top = _mouseDownPosition.top;
+
+      var EMIT_LENGTH = 3;
+      if (Math.abs(pageX - left) < EMIT_LENGTH && Math.abs(pageY - top) < EMIT_LENGTH) return;
       if (this.mouseDragging) return;
       this.mouseDragging = true;
 

@@ -59,7 +59,11 @@ class Drag {
   /**
    * 监听拖动开始
    */
-  onElMousemove () {
+  onElMousemove (e) {
+    let {pageX, pageY} = e
+    let {left, top} = this.mouseDownPosition
+    const EMIT_LENGTH = 3
+    if (Math.abs(pageX - left) < EMIT_LENGTH && Math.abs(pageY - top) < EMIT_LENGTH) return
     if (this.mouseDragging) return
     this.mouseDragging = true
 
